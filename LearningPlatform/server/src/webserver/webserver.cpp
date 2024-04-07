@@ -86,12 +86,7 @@ WebServer::WebServer(const std::string& _ip, USHORT _port, int _af, int _type, i
 	m_acceptSocketList->next = nullptr;
 	m_ptrWrite = m_acceptSocketList;
 
-	LARGE_INTEGER frequency;                   // 计算机的频率
-	QueryPerformanceFrequency(&frequency);     // 获取计算机的频率
-	m_maxKeepTime = 15 * frequency.QuadPart;   // 默认保持连接的时长为 15s
-
-	printf("%ld", m_maxKeepTime);
-
+	m_maxKeepTime = 15;
 }
 
 WebServer::~WebServer()
@@ -135,8 +130,6 @@ void WebServer::addAcceptSocket(AcceptSocket&& _value)
 	// 尾插法
 	InterlockedExchangePointer((PVOID*)&m_ptrWrite->next, node);
 	InterlockedExchangePointer((PVOID*)&m_ptrWrite, node);
-
-	// printf("InterlockedExchangePointer\n");
 }
 
 void WebServer::acceptConnection_threadFuntion()
@@ -199,9 +192,12 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 
 
 	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::waiting);  // 设置为等待状态
-	LARGE_INTEGER startCount;
-	QueryPerformanceCounter(&startCount);
-	InterlockedExchange64(&_acceptSocket.getWaitingTime(), startCount.QuadPart);                // 重新设置等待时间
+	//LARGE_INTEGER startCount;
+	//QueryPerformanceCounter(&startCount);
+
+
+	time::Timer timer{};
+	InterlockedExchange64(&_acceptSocket.getWaitingTime(), timer.getCount());                // 重新设置等待时间
 }
 
 
@@ -212,7 +208,10 @@ void WebServer::checkClientState_threadFuntion()
 	AcceptSocket* tempSocket;                         // 用于取值
 	AcceptSocketList* ptrRead = nullptr;              // 用于遍历 AcceptSocketList
 	AcceptSocketList* deleteNode = nullptr;           // 用于删除节点
-	LARGE_INTEGER endCount;                           // 记录结束时的运行次数
+
+	time::Timer timer{};
+
+	// LARGE_INTEGER endCount;                           // 记录结束时的运行次数
 
 	while (1)
 	{
@@ -243,8 +242,12 @@ void WebServer::checkClientState_threadFuntion()
 
 			// 计时
 			if (tempSocket->getState() == AcceptSocket::State::waiting) {
-				QueryPerformanceCounter(&endCount);
-				if (endCount.QuadPart - tempSocket->getWaitingTime() > m_maxKeepTime) {
+				// QueryPerformanceCounter(&endCount);
+				//if (endCount.QuadPart - tempSocket->getWaitingTime() > m_maxKeepTime) {
+				//	InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::terminated);
+				//}
+
+				if (timer.getCount() - tempSocket->getWaitingTime() > m_maxKeepTime * timer.getFrequency()) {
 					InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::terminated);
 				}
 			}
