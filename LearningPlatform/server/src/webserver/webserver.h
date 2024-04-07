@@ -47,7 +47,7 @@ public:
 		terminated
 	};
 private:
-	double m_waitingTime;
+	LONGLONG m_waitingTime;    // 保存计算机的运行次数
 	State m_state;
 public:
 	AcceptSocket();
@@ -59,7 +59,7 @@ public:
 	void operator=(const AcceptSocket&) = delete;
 	void operator=(AcceptSocket&& _value) noexcept;
 
-	double& getWaitingTime();
+	LONGLONG& getWaitingTime();
 	State& getState();
 };
 
@@ -78,7 +78,8 @@ private:
 	std::thread			    m_acceptThread;
 	std::thread			    m_checkThread;
 	AcceptSocketList       *m_acceptSocketList;
-	double                  m_maxKeepTime;
+	AcceptSocketList       *m_ptrWrite;
+	LONGLONG                m_maxKeepTime;  // 保存计算机的运行次数
 	threadpool::ThreadPool  m_threadPool;
 public:
 	WebServer(const std::string& _ip, USHORT _port, int _af = AF_INET, int _type = SOCK_STREAM, int _protocol = IPPROTO_TCP);
@@ -92,7 +93,7 @@ public:
 	
 	void startup();
 
-	double& getMaxKeepTime();
+	LONGLONG& getMaxKeepTime();
 
 	void addAcceptSocket(AcceptSocket&& _value);
 	void acceptConnection_threadFuntion();

@@ -17,7 +17,7 @@ mochen::socket::WinSockLibrary* getWinSockLibrary()
 AcceptSocket::AcceptSocket() : Socket()
 {
 	m_state = State::waiting;
-	m_waitingTime = 0.0;
+	m_waitingTime = 0;
 }
 
 AcceptSocket::AcceptSocket(AcceptSocket&& _value) noexcept
@@ -41,7 +41,7 @@ void AcceptSocket::operator=(AcceptSocket&& _value) noexcept
 	_value.m_socketFd = INVALID_SOCKET;
 }
 
-double& AcceptSocket::getWaitingTime()
+LONGLONG& AcceptSocket::getWaitingTime()
 {
 	return m_waitingTime;
 }
@@ -64,11 +64,14 @@ AcceptSocket::State& AcceptSocket::getState()
 //		ClientList* next;
 //	};
 //private:
-//	socket::ServerSocket m_serverSocket;
-//	std::thread m_acceptThread;
-//	std::thread m_checkThread;
-//	ClientList* m_acceptSocketList;
-//	double m_maxWaitingTime;
+//  socket::WinSockLibrary* m_winSockLibrary;
+//  socket::ServerSocket    m_serverSocket;
+//  std::thread			    m_acceptThread;
+//  std::thread			    m_checkThread;
+//  AcceptSocketList* m_acceptSocketList;
+//  AcceptSocketList* m_ptrWrite;
+//  LONGLONG                m_maxKeepTime;  // 保存计算机的运行次数
+//  threadpool::ThreadPool  m_threadPool;
 //public:
 
 
@@ -81,8 +84,14 @@ WebServer::WebServer(const std::string& _ip, USHORT _port, int _af, int _type, i
 {
 	m_acceptSocketList = new AcceptSocketList();
 	m_acceptSocketList->next = nullptr;
+	m_ptrWrite = m_acceptSocketList;
 
-	m_maxKeepTime = 15;   // 最大保持连接的时间为15s
+	LARGE_INTEGER frequency;                   // 计算机的频率
+	QueryPerformanceFrequency(&frequency);     // 获取计算机的频率
+	m_maxKeepTime = 15 * frequency.QuadPart;   // 默认保持连接的时长为 15s
+
+	printf("%ld", m_maxKeepTime);
+
 }
 
 WebServer::~WebServer()
@@ -107,7 +116,7 @@ void WebServer::startup()
 	m_threadPool.startup();
 }
 
-double& WebServer::getMaxKeepTime()
+LONGLONG& WebServer::getMaxKeepTime()
 {
 	return m_maxKeepTime;
 }
@@ -115,14 +124,19 @@ double& WebServer::getMaxKeepTime()
 
 void WebServer::addAcceptSocket(AcceptSocket&& _value)
 {
-	AcceptSocketList* data = new AcceptSocketList();
-	data->m_accpetSocket = std::move(_value);
-	while(1) {
-		data->next = m_acceptSocketList->next;
-		if (InterlockedCompareExchangePointer((PVOID*)&m_acceptSocketList->next, data, data->next) == data->next) {
-			break;
-		}
-	}
+	AcceptSocketList* node = new AcceptSocketList();
+	node->next = nullptr;
+	
+	LARGE_INTEGER startCount;
+	QueryPerformanceCounter(&startCount);
+	InterlockedExchange64(&_value.getWaitingTime(), startCount.QuadPart);
+	node->m_accpetSocket = std::move(_value);
+	
+	// 尾插法
+	InterlockedExchangePointer((PVOID*)&m_ptrWrite->next, node);
+	InterlockedExchangePointer((PVOID*)&m_ptrWrite, node);
+
+	// printf("InterlockedExchangePointer\n");
 }
 
 void WebServer::acceptConnection_threadFuntion()
@@ -185,45 +199,27 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 
 
 	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::waiting);  // 设置为等待状态
-	InterlockedExchange64((LONG64*)&_acceptSocket.getWaitingTime(), (LONG64)(0));               // 等待时间设为0
-
+	LARGE_INTEGER startCount;
+	QueryPerformanceCounter(&startCount);
+	InterlockedExchange64(&_acceptSocket.getWaitingTime(), startCount.QuadPart);                // 重新设置等待时间
 }
-
-
-void func(int a) {  // 正确正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确
-	std::cout << a << std::endl;
-}
-
-
 
 
 void WebServer::checkClientState_threadFuntion()
 {
-
-	// m_threadPool.addTask(&func, 12);  // 正确正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确 正确
-	//m_threadPool.addTask(&WebServer::acceptConnection_threadFuntion, this);
-
 	int len;
-	char buffer[4094] = { 0 };              // 每次接收的缓冲区大小设为4kb
-	AcceptSocket* tempSocket;               // 用于取值
-	AcceptSocketList* temp = nullptr;       // 用于遍历 AcceptSocketList
-	AcceptSocketList* del = nullptr;        // 用于删除节点
-
-	LARGE_INTEGER frequency;                // 计算机的频率
-	LARGE_INTEGER startCount;               // 记录开始时的运行次数
-	LARGE_INTEGER endCount;                 // 记录结束时的运行次数
-	double time;                            // 保存时间，单位s秒
-
-	QueryPerformanceFrequency(&frequency);  // 获取计算机的频率
+	char buffer[4094] = { 0 };                        // 每次接收的缓冲区大小设为4kb
+	AcceptSocket* tempSocket;                         // 用于取值
+	AcceptSocketList* ptrRead = nullptr;              // 用于遍历 AcceptSocketList
+	AcceptSocketList* deleteNode = nullptr;           // 用于删除节点
+	LARGE_INTEGER endCount;                           // 记录结束时的运行次数
 
 	while (1)
 	{
-		temp = m_acceptSocketList;
-		QueryPerformanceCounter(&startCount);
-
-		while (temp->next != nullptr)
+		ptrRead = m_acceptSocketList;    // 注意 一开始 ptrRead 可能会变成 nullptr
+		while (ptrRead->next != nullptr)
 		{
-			tempSocket = &temp->next->m_accpetSocket;
+			tempSocket = &ptrRead->next->m_accpetSocket;
 			if (tempSocket->getState() == AcceptSocket::State::waiting)
 			{
 				len = recv(tempSocket->getSocketFd(), buffer, 4094, 0);
@@ -232,43 +228,43 @@ void WebServer::checkClientState_threadFuntion()
 
 					InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::working); // 设置为工作状态
 
-					
+
 
 					m_threadPool.addTask(&WebServer::dealData_taskFuntion, std::ref(*tempSocket), std::string(buffer));   // 注意：*tempSocket是值类型要用 std::ref 转成引用类型
 
 					memset(buffer, 0, sizeof(buffer));
 				}
 				else if (len == 0                                                     // len=0 表示客户端已关闭连接
-					|| (len == SOCKET_ERROR && WSAGetLastError() != WSAEWOULDBLOCK))  // 不是非阻塞模式下的错误
+					|| (len == SOCKET_ERROR && WSAGetLastError() != WSAEWOULDBLOCK))  // 不是非阻塞模式下的错误。（通常是网页刷新，传了同一个socket进来，导致又两个一样的socket）
 				{
 					InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::terminated);
 				}
 			}
+
 			// 计时
 			if (tempSocket->getState() == AcceptSocket::State::waiting) {
 				QueryPerformanceCounter(&endCount);
-				time = (endCount.QuadPart - startCount.QuadPart) / (double)frequency.QuadPart;
-				time += tempSocket->getWaitingTime();
-				
-				if (time < m_maxKeepTime) {
-					InterlockedExchange64((LONG64*)&tempSocket->getWaitingTime(), (LONG64)(time));
-				}
-				else {
+				if (endCount.QuadPart - tempSocket->getWaitingTime() > m_maxKeepTime) {
 					InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::terminated);
 				}
 			}
 
-			// 删除 (头插法怎么删除 ？？？？？？？？？？？ )
-			//if (tempSocket->getState() == AcceptSocket::State::terminated) {
-			//	del = temp->next;
-			//	InterlockedExchangePointer((PVOID*)temp->next, temp->next->next);
-			//	delete(del);    // 会自动调用 AcceptSocket::~AcceptSocket();
-			//}
-
-			temp = temp->next;
+			// 删除已终止的节点，注意不能删除 m_ptrWrite 尾节点
+			if (tempSocket->getState() == AcceptSocket::State::terminated) {
+				tempSocket->clear();
+				if (ptrRead->next != m_ptrWrite) {          // 注意 ptrRead->next != m_ptrWrite 不能删除尾节点
+					deleteNode = ptrRead->next;
+					ptrRead->next = ptrRead->next->next;    // 不需要原子操作，因为上面已经判断了 ptrRead->next != m_ptrWrite
+					ptrRead = ptrRead->next;
+					delete(deleteNode);
+				}
+			}
+			else {
+				ptrRead = ptrRead->next;
+			}
 		}
-		
-
 	}
 
 }
+
+

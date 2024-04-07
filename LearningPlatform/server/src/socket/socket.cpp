@@ -70,7 +70,8 @@ void Socket::operator=(Socket&& _value) noexcept
 void Socket::clear() 
 {
 	if (m_socketFd != INVALID_SOCKET) {
-		closesocket(m_socketFd);   // closesocket 函数会把 socket 赋值为 INVALID_SOCKET
+		closesocket(m_socketFd);
+		m_socketFd = INVALID_SOCKET;
 	}
 }
 
