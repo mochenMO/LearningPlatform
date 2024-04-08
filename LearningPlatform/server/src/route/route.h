@@ -2,8 +2,7 @@
 #ifndef _MOCHEN_ROUTE_H_
 #define _MOCHEN_ROUTE_H_
 
-#include "../session/session.h"
-#include "../http/http.h"
+#include "../httpserver/httpserver.h"
 
 
 namespace mochen
@@ -16,11 +15,10 @@ namespace route
 class Route
 {
 public:
-	typedef void (*PDealHttpService)(http::HttpRequest& _httpRequest, http::HttpResponse& _httpResponse);
+	typedef void (*PDealHttpService)(httpserver::HttpServerRequest& _httpServerRequest, httpserver::HttpServerResqonse& _httpServerResqonse);
 private:
 	std::map<std::string, PDealHttpService> m_routeTree;
 	std::string m_staticFilePath;
-	session::Session* m_session;
 public:
 	Route() = default;
 	Route(std::map<std::string, PDealHttpService>& _routeTree, const std::string& _staticFilePath);
@@ -37,8 +35,6 @@ public:
 	PDealHttpService getPDealHttpService(const std::string& _urlPath);
 
 	std::string& getStaticFilePath();
-
-	const session::Session& getSession();
 };
 
 

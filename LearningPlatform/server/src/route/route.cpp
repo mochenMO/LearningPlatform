@@ -5,8 +5,7 @@ using namespace mochen::route;
 
 Route::Route(std::map<std::string, PDealHttpService>& _routeTree, const std::string& _staticFilePath)
 	: m_routeTree(_routeTree),
-	m_staticFilePath(m_staticFilePath),
-	m_session(nullptr)
+	m_staticFilePath(m_staticFilePath)
 {
 
 }
@@ -33,10 +32,7 @@ std::string& Route::getStaticFilePath()
 	return m_staticFilePath;
 }
 
-const mochen::session::Session& Route::getSession()
-{
-	return *m_session;
-}
+
 
 
 

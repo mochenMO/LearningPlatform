@@ -3,13 +3,13 @@
 #define _MOCHEN_ROUTECONFIG_H_
 
 
-#include "../../server/src/route/route.h"
-
+#include "../src/page/default.h"
+#include "../src/page/login.h"
 
 namespace mochen
 {
 
-namespace route
+namespace page
 {
 
 
@@ -17,27 +17,24 @@ namespace route
 
 
 
-Route* createRoute()
+inline route::Route* createRoute()
 {
-	Route route{};
-	route.getStaticFilePath() = "web/static/";    // 被忘了结尾的'/'
+	static route::Route route{};
+	route.getStaticFilePath() = "web/static";    // 被忘了结尾的'/'
+	
+	route.setRoute("/default", &defaultPageMainFuntion);
+	route.setRoute("/login", &loginPageMainFuntion);
 
-	route.setRoute("/",)
 
 
-
-
+	return &route;
 }
 	
 
 
-
-
-
-
-Route* getRoute()
+inline route::Route* getRoute()
 {
-	static Route* route = createRoute();
+	static route::Route* route = createRoute();
 	return route;
 }
 

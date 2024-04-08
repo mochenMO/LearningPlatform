@@ -80,13 +80,17 @@ WebServer::WebServer(const std::string& _ip, USHORT _port, int _af, int _type, i
 	m_serverSocket(_ip, _port, _af, _type, _protocol),
 	m_acceptThread(),
 	m_checkThread(),
-	m_threadPool()
+	m_threadPool(),
+	m_session()
 {
 	m_acceptSocketList = new AcceptSocketList();
 	m_acceptSocketList->next = nullptr;
 	m_ptrWrite = m_acceptSocketList;
 
 	m_maxKeepTime = 15;
+
+	m_route = mochen::page::getRoute();
+	m_session.setParamter<mochen::route::Route*>("Route", m_route);   // 注意这里用的是 Route* 因为 Route 是禁止拷贝和移动的
 }
 
 WebServer::~WebServer()
@@ -122,9 +126,9 @@ void WebServer::addAcceptSocket(AcceptSocket&& _value)
 	AcceptSocketList* node = new AcceptSocketList();
 	node->next = nullptr;
 	
-	LARGE_INTEGER startCount;
-	QueryPerformanceCounter(&startCount);
-	InterlockedExchange64(&_value.getWaitingTime(), startCount.QuadPart);
+	time::Timer timer{};
+	InterlockedExchange64(&_value.getWaitingTime(), timer.getCount());   // 设置起始时间
+
 	node->m_accpetSocket = std::move(_value);
 	
 	// 尾插法
@@ -185,19 +189,25 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	http::HttpRequest httpRequest = httpParser.parseHttpRequest();
 	std::cout << httpRequest.headerToString() << std::endl;    // @!#@!#@!#@!#@!#@!#@!#@$#!
 
+	httpserver::HttpServerRequest httpServerRequest(std::move(httpRequest), &m_session);
+	httpserver::HttpServerResqonse httpServerResqonse;
+
+	std::string urlPath = httpServerRequest.getUrl().getPath();
+	if (m_route->isFind(urlPath) == true) {
+		m_route->getPDealHttpService(urlPath)(httpServerRequest, httpServerResqonse);
+	}
 
 	 
 	// 判断是不是处理的是静态的文件，如果是则默认处理，如果不是则通过 routeTree 分发给用户写的后端代码处理
 	// ....
 
 
-	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::waiting);  // 设置为等待状态
-	//LARGE_INTEGER startCount;
-	//QueryPerformanceCounter(&startCount);
 
+
+	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::waiting);  // 设置为等待状态
 
 	time::Timer timer{};
-	InterlockedExchange64(&_acceptSocket.getWaitingTime(), timer.getCount());                // 重新设置等待时间
+	InterlockedExchange64(&_acceptSocket.getWaitingTime(), timer.getCount());                // 重新设置起始时间
 }
 
 
@@ -229,7 +239,7 @@ void WebServer::checkClientState_threadFuntion()
 
 
 
-					m_threadPool.addTask(&WebServer::dealData_taskFuntion, std::ref(*tempSocket), std::string(buffer));   // 注意：*tempSocket是值类型要用 std::ref 转成引用类型
+					m_threadPool.addTask(&WebServer::dealData_taskFuntion, this,std::ref(*tempSocket), std::string(buffer));   // 注意：*tempSocket是值类型要用 std::ref 转成引用类型
 
 					memset(buffer, 0, sizeof(buffer));
 				}

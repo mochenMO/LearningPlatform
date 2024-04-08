@@ -23,7 +23,10 @@
 
 #include "../socket/socket.h"
 #include "../threadpool/threadpool.h"
-#include "../http/http.h"   /////////////////////////////////////////
+// #include "../http/http.h"   /////////////////////////////////////////
+
+#include "../../../web/config/routeconfig.h"
+
 #include "../time/time.h"
 
 #include <iostream>       // @!#!@$#@@@@@@@@$!@#$@!#!@#!@%$%!%!#$%#!$%#$!%@#!%$!@#%#$%!#$%#$!
@@ -81,6 +84,8 @@ private:
 	AcceptSocketList       *m_ptrWrite;
 	LONGLONG                m_maxKeepTime;  // 保存计算机的运行次数
 	threadpool::ThreadPool  m_threadPool;
+	route::Route*           m_route;
+	session::Session        m_session;
 public:
 	WebServer(const std::string& _ip, USHORT _port, int _af = AF_INET, int _type = SOCK_STREAM, int _protocol = IPPROTO_TCP);
 	~WebServer();
@@ -98,7 +103,7 @@ public:
 	void addAcceptSocket(AcceptSocket&& _value);
 	void acceptConnection_threadFuntion();
 
-	static void dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _value);  // 注意两个参数的类型，AcceptSocket& 和 std::string
+	void dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _value);  // 注意两个参数的类型，AcceptSocket& 和 std::string
 	void checkClientState_threadFuntion();
 };
 
