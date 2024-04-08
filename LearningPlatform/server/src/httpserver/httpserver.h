@@ -12,7 +12,7 @@ namespace mochen
 namespace httpserver
 {
 
-using HttpServerResqonse = http::HttpResponse;
+
 
 
 class HttpServerRequest : public http::HttpRequest
@@ -33,6 +33,33 @@ public:
 	
 	session::Session& getSession();
 };
+
+
+
+
+class HttpServerResqonse : public http::HttpResponse
+{
+private:
+	std::string m_filename;
+public:
+	HttpServerResqonse() = default;
+	~HttpServerResqonse() = default;
+
+	HttpServerResqonse(const HttpServerRequest&) = delete;
+	HttpServerResqonse(HttpServerRequest&&) noexcept = delete;
+
+	HttpServerRequest& operator=(const HttpServerRequest&) = delete;
+	HttpServerRequest& operator = (HttpServerRequest&&) noexcept = delete;
+
+	std::string& getFilename();
+};
+
+
+
+
+
+
+
 
 
 

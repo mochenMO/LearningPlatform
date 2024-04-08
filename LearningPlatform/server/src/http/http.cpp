@@ -318,6 +318,14 @@ void HttpRequest::setCookie(std::map<std::string, std::string>& _cookie)
 // =============================================================================================================
 // HttpResponse
 
+HttpResponse::HttpResponse() 
+{
+	m_version = "HTTP/1.1";
+	m_statusCode = "200";
+	m_statusDescription = "OK";
+}
+
+
 std::string& HttpResponse::getVersion()
 {
 	return m_version;

@@ -161,6 +161,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 {
 	int len = _value.size();
 	char buffer[4094] = { 0 };
+
 	if (len == 4094) {    // 等于缓冲区的大小，说明还有数据，则循环接收
 		while (1) {
 			int len = _acceptSocket.recv(buffer, 4094);
@@ -190,11 +191,48 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	std::cout << httpRequest.headerToString() << std::endl;    // @!#@!#@!#@!#@!#@!#@!#@$#!
 
 	httpserver::HttpServerRequest httpServerRequest(std::move(httpRequest), &m_session);
-	httpserver::HttpServerResqonse httpServerResqonse;
+	httpserver::HttpServerResqonse httpServerResqonse{};
 
 	std::string urlPath = httpServerRequest.getUrl().getPath();
 	if (m_route->isFind(urlPath) == true) {
 		m_route->getPDealHttpService(urlPath)(httpServerRequest, httpServerResqonse);
+	}
+
+	std::string filename = httpServerResqonse.getFilename();
+	if (filename != "") {
+		FILE* fp = fopen(filename.c_str(), "r");
+		if (fp != nullptr) {
+
+			// 根据后缀名改 "text/html"   ///////////////////////////////////////////////////////////////////////
+
+			//httpServerResqonse.getStatusCode() = "301";
+			//httpServerResqonse.getStatusDescription() = "Moved Permanently";
+			//httpServerResqonse.setParamter("Location","http://127.123.123.1:8888/login/src");
+
+			httpServerResqonse.setParamter("Content-Type", "text/html");
+			
+
+			std::cout << httpServerResqonse.headerToString() << std::endl; ///////////////////////////////////////////////////////////////////////
+
+			std::string httpServerResqonseHeader = httpServerResqonse.headerToString();
+			
+			len = send(_acceptSocket.getSocketFd(), httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size(), 0);
+		
+
+			while (1) {
+				len = fread(buffer, sizeof(char), sizeof(buffer), fp);
+				len = send(_acceptSocket.getSocketFd(), buffer, len, 0);
+				if (len < 4096) {
+					break;
+				}
+			}
+
+			fclose(fp);
+		}
+		else {
+			printf("文件打开失败！\n");  // #@!#@!#@!#@!#!@#!@#!@#!@#!@#!@#
+		}
+
 	}
 
 	 

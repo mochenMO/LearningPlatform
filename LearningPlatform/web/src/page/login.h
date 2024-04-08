@@ -18,6 +18,8 @@ namespace page
 
 inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerRequest, httpserver::HttpServerResqonse& _httpServerResqonse)
 {
+	_httpServerResqonse.getFilename() = "web/static/default.html";
+
 	std::cout << "loginPageMainFuntion is OK" << std::endl;
 
 }

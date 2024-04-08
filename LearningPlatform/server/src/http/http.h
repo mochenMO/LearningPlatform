@@ -119,7 +119,7 @@ private:
 	std::map<std::string, std::string> m_parameters;
 	std::string m_data;
 public:
-	HttpResponse() = default;
+	HttpResponse();
 	~HttpResponse() = default;
 
 	HttpResponse(const HttpResponse& _value) = default;
