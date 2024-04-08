@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,6 +132,8 @@
     <ClCompile Include="server\src\http\http.cpp" />
     <ClCompile Include="server\src\json\json.cpp" />
     <ClCompile Include="server\src\log\log.cpp" />
+    <ClCompile Include="server\src\route\route.cpp" />
+    <ClCompile Include="server\src\session\session.h" />
     <ClCompile Include="server\src\socket\socket.cpp" />
     <ClCompile Include="server\src\threadpool\threadpool.cpp" />
     <ClCompile Include="server\src\time\time.cpp" />
@@ -141,10 +144,13 @@
     <ClInclude Include="server\src\http\http.h" />
     <ClInclude Include="server\src\json\json.h" />
     <ClInclude Include="server\src\log\log.h" />
+    <ClInclude Include="server\src\route\route.h" />
     <ClInclude Include="server\src\socket\socket.h" />
     <ClInclude Include="server\src\threadpool\threadpool.h" />
     <ClInclude Include="server\src\time\time.h" />
     <ClInclude Include="server\src\webserver\webserver.h" />
+    <ClInclude Include="web\config\routeconfig.h" />
+    <ClInclude Include="web\src\page\default.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="server\config\mimetypes.json" />
@@ -152,6 +158,7 @@
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="server\config\webserver.json" />
+    <None Include="web\static\test.html" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -41,8 +41,8 @@ public:
 
 	void startup();
 
-	template<typename _Fx, typename... _Args>   // 模板函数要写在头文件中
-	void addTask(_Fx&& _f, _Args&& ..._args)
+	template<typename _Fn, typename... _Args>   // 模板函数要写在头文件中
+	void addTask(_Fn&& _f, _Args&& ..._args)
 	{
 		auto temp = std::bind(_f, std::forward<_Args>(_args)...);
 		m_mutex.lock();

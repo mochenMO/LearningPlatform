@@ -39,6 +39,12 @@
     <ClCompile Include="server\src\time\time.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="server\src\route\route.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="server\src\session\session.h">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="server\src\log\log.h">
@@ -65,10 +71,20 @@
     <ClInclude Include="server\src\time\time.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="web\config\routeconfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="web\src\page\default.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="server\src\route\route.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="server\config\websever,json" />
     <None Include="server\config\mimetypes.json" />
     <None Include="server\config\webserver.json" />
+    <None Include="web\static\test.html" />
   </ItemGroup>
 </Project>
