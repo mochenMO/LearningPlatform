@@ -97,9 +97,4 @@
     <None Include="web\static\default.html" />
     <None Include="web\static\html\default.html" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="C:\Users\Administrator\Desktop\Server01-0.6-2023-6-1\Server01\web\default\res\favicon.ico">
-      <Filter>资源文件</Filter>
-    </Image>
-  </ItemGroup>
 </Project>
