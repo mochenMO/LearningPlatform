@@ -3,33 +3,39 @@
 using namespace mochen::route;
 
 
-Route::Route(std::map<std::string, PDealHttpService>& _routeTree, const std::string& _staticFilePath)
-	: m_routeTree(_routeTree),
-	m_staticFilePath(m_staticFilePath)
-{
-
-}
-
 void  Route::setRoute(const std::string& _urlPath, Route::PDealHttpService _pDealHttpService)
 {
 	m_routeTree[_urlPath] = _pDealHttpService;
 }
 
-bool Route::isFind(std::string _urlPath)
+bool Route::isFindFunction(std::string _urlPath)
 {
 	return (m_routeTree.find(_urlPath) != m_routeTree.end());
 }
 
-
-Route::PDealHttpService Route::getPDealHttpService(const std::string& _urlPath)
+Route::PDealHttpService Route::getFunction(const std::string& _urlPath)
 {
 	return m_routeTree[_urlPath];
 }
 
-
-std::string& Route::getStaticFilePath()
+void Route::setStaticFile(const std::string& _urlPath, const std::string& _filename)
 {
-	return m_staticFilePath;
+	m_staticFileMap[_urlPath] = _filename;
+}
+
+bool Route::isFindStaticFile(std::string _urlPath)
+{
+	return (m_staticFileMap.find(_urlPath) != m_staticFileMap.end());
+}
+
+std::string& Route::getStaticFile(const std::string& _urlPath)
+{
+	return m_staticFileMap[_urlPath];
+}
+
+std::string& Route::getDefaultStaticFilePath()
+{
+	return m_defineStaticFilePath;
 }
 
 

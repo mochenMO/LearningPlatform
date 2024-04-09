@@ -4,7 +4,8 @@
 /*
 1.不使用默认的urlPath即"/"。
 2.没有文件后缀名的urlPath，默认调用static文件中的 pagename.html
-3.获取static文件，则urlPath为：/<pagename>/static/<filename.xxx>
+3.获取static文件，则urlPath为：/login/filename.xxx                        通过urlPath请求文件
+4.获取非static文件，则则urlPath为：/login/src?filename = filename.xxx          通过url中的参数请求文件
                             
 
 4.要交由后端逻辑代码处理，则urlPath为：/src/<pagename>

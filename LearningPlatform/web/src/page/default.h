@@ -20,8 +20,8 @@ inline void defaultPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 {
 	std::cout << "defaultPageMainFuntion is OK" << std::endl;
 
-	route::Route* route = _httpServerRequest.getSession().getParamter<route::Route*>("Route");    // 实现转发
-	route->getPDealHttpService("/login")(_httpServerRequest, _httpServerResqonse);                // 但有一个问题 getPDealHttpService 不会检测值是否存在
+	route::Route* route = _httpServerRequest.getSession()->getParamter<route::Route*>("Route");    // 实现转发
+	route->getFunction("/login")(_httpServerRequest, _httpServerResqonse);                // 但有一个问题 getPDealHttpService 不会检测值是否存在
 }
 
 

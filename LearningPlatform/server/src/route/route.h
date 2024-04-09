@@ -12,16 +12,18 @@ namespace route
 {
 
 
+
+
 class Route
 {
 public:
 	typedef void (*PDealHttpService)(httpserver::HttpServerRequest& _httpServerRequest, httpserver::HttpServerResqonse& _httpServerResqonse);
 private:
 	std::map<std::string, PDealHttpService> m_routeTree;
-	std::string m_staticFilePath;
+	std::map<std::string, std::string> m_staticFileMap;
+	std::string m_defineStaticFilePath;
 public:
 	Route() = default;
-	Route(std::map<std::string, PDealHttpService>& _routeTree, const std::string& _staticFilePath);
 	~Route() = default;
 		
 	Route(const Route&) = delete;
@@ -31,11 +33,18 @@ public:
 	Route& operator = (Route&&) noexcept = delete;
 	
 	void setRoute(const std::string& _urlPath, PDealHttpService _pDealHttpService);
-	bool isFind(std::string _urlPath);
-	PDealHttpService getPDealHttpService(const std::string& _urlPath);
+	bool isFindFunction(std::string _urlPath);
+	PDealHttpService getFunction(const std::string& _urlPath);
 
-	std::string& getStaticFilePath();
+	void setStaticFile(const std::string& _urlPath, const std::string& _filename);
+	bool isFindStaticFile(std::string _urlPath);
+	std::string& getStaticFile(const std::string& _urlPath);
+
+	std::string& getDefaultStaticFilePath();
 };
+
+
+
 
 
 

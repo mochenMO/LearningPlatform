@@ -182,43 +182,54 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 		}
 	}
 
-	std::cout << _value << std::endl;       // @!#@!#@!#@!#@!#@!#@!#@$#!
 
+	std::cout << _value << std::endl;   /////////////////////////////////////////////////////////////////////////
 
 
 	http::HttpParser httpParser(_value);
 	http::HttpRequest httpRequest = httpParser.parseHttpRequest();
-	std::cout << httpRequest.headerToString() << std::endl;    // @!#@!#@!#@!#@!#@!#@!#@$#!
-
-	httpserver::HttpServerRequest httpServerRequest(std::move(httpRequest), &m_session);
+	std::cout << httpRequest.headerToString() << std::endl;    /////////////////////////////////////////////////////////////////////////
+	httpserver::HttpServerRequest httpServerRequest(std::move(httpRequest));
+	httpServerRequest.getSession() = &m_session;
 	httpserver::HttpServerResqonse httpServerResqonse{};
 
+	// 根据 url 进行逻辑处理
 	std::string urlPath = httpServerRequest.getUrl().getPath();
-	if (m_route->isFind(urlPath) == true) {
-		m_route->getPDealHttpService(urlPath)(httpServerRequest, httpServerResqonse);
+	std::string filename = "";
+	const char* fileSuffixName = nullptr;
+	// 处理静态文件请求
+	if (m_route->isFindStaticFile(urlPath) == true) {          // 判断是否请求了默认的静态文件
+		filename += m_route->getDefaultStaticFilePath();
+		filename += m_route->getStaticFile(urlPath);
+	}
+	else if (strchr(urlPath.c_str(), '.') != nullptr) {        // 在urlPath中如果有文件后缀名，说明请求的是其他静态文件
+		filename += m_route->getDefaultStaticFilePath();
+		filename += urlPath;	
+	}
+	if (filename != "") {
+		fileSuffixName = strchr(filename.c_str(), '.') + 1;    // 获取文件后缀名 +1 跳过"."
+		std::string contentType = httpServerResqonse.getContentType(fileSuffixName);
+		if (contentType != "") {
+			httpServerResqonse.setParamter("Content-Type", contentType);
+		}
+		else {
+			printf("not find contentType logger logger\n"); /////////////////////////////////////////////////////////////////////////
+		}
+	}
+	// 处理动态请求
+	if (m_route->isFindFunction(urlPath) == true){
+		m_route->getFunction(urlPath)(httpServerRequest, httpServerResqonse);
 	}
 
-	std::string filename = httpServerResqonse.getFilename();
+
+	// 开始发送数据
+	std::string httpServerResqonseHeader = httpServerResqonse.headerToString();
+	std::cout << httpServerResqonse.headerToString() << std::endl; ///////////////////////////////////////////////////////////////////////
+	len = send(_acceptSocket.getSocketFd(), httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size(), 0);   // 先发送请求头部
+	
 	if (filename != "") {
 		FILE* fp = fopen(filename.c_str(), "r");
 		if (fp != nullptr) {
-
-			// 根据后缀名改 "text/html"   ///////////////////////////////////////////////////////////////////////
-
-			//httpServerResqonse.getStatusCode() = "301";
-			//httpServerResqonse.getStatusDescription() = "Moved Permanently";
-			//httpServerResqonse.setParamter("Location","http://127.123.123.1:8888/login/src");
-
-			httpServerResqonse.setParamter("Content-Type", "text/html");
-			
-
-			std::cout << httpServerResqonse.headerToString() << std::endl; ///////////////////////////////////////////////////////////////////////
-
-			std::string httpServerResqonseHeader = httpServerResqonse.headerToString();
-			
-			len = send(_acceptSocket.getSocketFd(), httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size(), 0);
-		
-
 			while (1) {
 				len = fread(buffer, sizeof(char), sizeof(buffer), fp);
 				len = send(_acceptSocket.getSocketFd(), buffer, len, 0);
@@ -226,20 +237,12 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 					break;
 				}
 			}
-
 			fclose(fp);
 		}
 		else {
-			printf("文件打开失败！\n");  // #@!#@!#@!#@!#!@#!@#!@#!@#!@#!@#
+			printf("文件打开失败！logger\n");  // #@!#@!#@!#@!#!@#!@#!@#!@#!@#!@#
 		}
-
 	}
-
-	 
-	// 判断是不是处理的是静态的文件，如果是则默认处理，如果不是则通过 routeTree 分发给用户写的后端代码处理
-	// ....
-
-
 
 
 	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::waiting);  // 设置为等待状态

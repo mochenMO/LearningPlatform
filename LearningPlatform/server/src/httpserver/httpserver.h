@@ -5,6 +5,7 @@
 
 #include "../http/http.h"
 #include "../session/session.h"
+#include "../json/json.h"
 
 namespace mochen
 {
@@ -21,8 +22,8 @@ private:
 	session::Session* m_session;
 public:
 	HttpServerRequest() = default;
-	HttpServerRequest(HttpRequest& _httpRequest, session::Session* _session);
-	HttpServerRequest(HttpRequest&& _httpRequest, session::Session* _session);
+	HttpServerRequest(HttpRequest& _httpRequest);
+	HttpServerRequest(HttpRequest&& _httpRequest);
 	~HttpServerRequest() = default;
 		
 	HttpServerRequest(const HttpServerRequest&) = delete;
@@ -31,7 +32,7 @@ public:
 	HttpServerRequest& operator=(const HttpServerRequest&) = delete;
 	HttpServerRequest& operator = (HttpServerRequest&&) noexcept = delete;
 	
-	session::Session& getSession();
+	session::Session*& getSession();
 };
 
 
@@ -41,8 +42,9 @@ class HttpServerResqonse : public http::HttpResponse
 {
 private:
 	std::string m_filename;
+	json::Json* m_mineTypeConfig;
 public:
-	HttpServerResqonse() = default;
+	HttpServerResqonse();
 	~HttpServerResqonse() = default;
 
 	HttpServerResqonse(const HttpServerRequest&) = delete;
@@ -52,6 +54,7 @@ public:
 	HttpServerRequest& operator = (HttpServerRequest&&) noexcept = delete;
 
 	std::string& getFilename();
+	std::string getContentType(const std::string& _fileSuffixName);
 };
 
 
