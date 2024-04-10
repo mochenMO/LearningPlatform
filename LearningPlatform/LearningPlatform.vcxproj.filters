@@ -71,9 +71,6 @@
     <ClInclude Include="server\src\webserver\webserver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="server\config\webapps.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="server\src\time\time.h">
       <Filter>头文件</Filter>
     </ClInclude>

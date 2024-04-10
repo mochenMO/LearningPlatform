@@ -142,7 +142,6 @@
     <ClCompile Include="web\src\page\login.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="server\config\webapps.h" />
     <ClInclude Include="server\src\httpserver\httpserver.h" />
     <ClInclude Include="server\src\http\http.h" />
     <ClInclude Include="server\src\json\json.h" />

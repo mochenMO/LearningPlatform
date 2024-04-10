@@ -23,7 +23,7 @@ inline route::Route* createRoute()
 	route.getDefaultStaticFilePath() = "web/static";
 	
 	route.setStaticFile("/test", "/html/default.html");       // 注意文件路径开头有"/"
-	route.setStaticFile("/favicon.ico", "/res/favicon.ico");  
+	route.setStaticFile("/favicon.ico", "/img/favicon.ico");  
 
 	route.setRoute("/default", &defaultPageMainFuntion);
 	route.setRoute("/login", &loginPageMainFuntion);

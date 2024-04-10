@@ -47,7 +47,8 @@ void ThreadPool::startup()
 {
 	SYSTEM_INFO systemInfo;
 	GetSystemInfo(&systemInfo);  // 获取系统的相关信息，包括CPU物理核心数。如果想要更详细的核心数信息，包括逻辑处理器数请使用函数 GetLogicalProcessorInformation 
-	m_maxSize = systemInfo.dwNumberOfProcessors * 2;    // 注意：在普通台式机中，一个进程的线程数，一般不大于其CPU物理核心数的两倍
+	// m_maxSize = systemInfo.dwNumberOfProcessors * 2;    // 注意：在普通台式机中，一个进程的线程数，一般不大于其CPU物理核心数的两倍
+	m_maxSize = systemInfo.dwNumberOfProcessors;          
 
 	for (int i = 0; i < m_maxSize; ++i) {
 		std::thread t(&ThreadPool::threadFuntion, this);

@@ -55,26 +55,6 @@ AcceptSocket::State& AcceptSocket::getState()
 // ==============================================================================================================
 // class Client
 
-//class WebServer
-//{
-//private:
-//	struct ClientList
-//	{
-//		Client* m_client;
-//		ClientList* next;
-//	};
-//private:
-//  socket::WinSockLibrary* m_winSockLibrary;
-//  socket::ServerSocket    m_serverSocket;
-//  std::thread			    m_acceptThread;
-//  std::thread			    m_checkThread;
-//  AcceptSocketList* m_acceptSocketList;
-//  AcceptSocketList* m_ptrWrite;
-//  LONGLONG                m_maxKeepTime;  // 保存计算机的运行次数
-//  threadpool::ThreadPool  m_threadPool;
-//public:
-
-
 WebServer::WebServer(const std::string& _ip, USHORT _port, int _af, int _type, int _protocol)
 	: m_winSockLibrary(getWinSockLibrary()),
 	m_serverSocket(_ip, _port, _af, _type, _protocol),
@@ -96,6 +76,7 @@ WebServer::WebServer(const std::string& _ip, USHORT _port, int _af, int _type, i
 WebServer::~WebServer()
 {
 	///////////////////////////////////////////////
+	// 实现关闭功能...
 
 	m_checkThread.join();
 	m_acceptThread.join();
@@ -192,6 +173,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	httpserver::HttpServerRequest httpServerRequest(std::move(httpRequest));
 	httpServerRequest.getSession() = &m_session;
 	httpserver::HttpServerResqonse httpServerResqonse{};
+	// httpServerResqonse.setParamter("Connection", "close"); /////////////////////////////////////////////////////////////////////////
 
 	// 根据 url 进行逻辑处理
 	std::string urlPath = httpServerRequest.getUrl().getPath();
@@ -245,10 +227,14 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	}
 
 
-	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::waiting);  // 设置为等待状态
+	// 短链接
+	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::working);  // 设置为终止状态
+	_acceptSocket.clear();
 
-	time::Timer timer{};
-	InterlockedExchange64(&_acceptSocket.getWaitingTime(), timer.getCount());                // 重新设置起始时间
+	// 长连接
+	// InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::working);  // 设置为等待状态 
+	// time::Timer timer{};
+	// InterlockedExchange64(&_acceptSocket.getWaitingTime(), timer.getCount());                   // 重新设置起始时间
 }
 
 
@@ -259,10 +245,7 @@ void WebServer::checkClientState_threadFuntion()
 	AcceptSocket* tempSocket;                         // 用于取值
 	AcceptSocketList* ptrRead = nullptr;              // 用于遍历 AcceptSocketList
 	AcceptSocketList* deleteNode = nullptr;           // 用于删除节点
-
 	time::Timer timer{};
-
-	// LARGE_INTEGER endCount;                           // 记录结束时的运行次数
 
 	while (1)
 	{
@@ -278,8 +261,6 @@ void WebServer::checkClientState_threadFuntion()
 
 					InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::working); // 设置为工作状态
 
-
-
 					m_threadPool.addTask(&WebServer::dealData_taskFuntion, this,std::ref(*tempSocket), std::string(buffer));   // 注意：*tempSocket是值类型要用 std::ref 转成引用类型
 
 					memset(buffer, 0, sizeof(buffer));
@@ -293,11 +274,6 @@ void WebServer::checkClientState_threadFuntion()
 
 			// 计时
 			if (tempSocket->getState() == AcceptSocket::State::waiting) {
-				// QueryPerformanceCounter(&endCount);
-				//if (endCount.QuadPart - tempSocket->getWaitingTime() > m_maxKeepTime) {
-				//	InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::terminated);
-				//}
-
 				if (timer.getCount() - tempSocket->getWaitingTime() > m_maxKeepTime * timer.getFrequency()) {
 					InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::terminated);
 				}
