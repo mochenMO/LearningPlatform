@@ -95,7 +95,7 @@ int Socket::recv(char* _buffer, int _bufferSize)
 	return ::recv(m_socketFd, _buffer, _bufferSize, 0);
 }
 
-int Socket::send(char* _buffer, int _bufferSize)
+int Socket::send(const char* _buffer, int _bufferSize)
 {
 	return ::send(m_socketFd, _buffer, _bufferSize, 0);
 }

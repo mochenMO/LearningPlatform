@@ -140,6 +140,7 @@ void WebServer::acceptConnection_threadFuntion()
 		}
 		else {
 			acceptSocket.getSocketFd() = tempSocketFd;
+			// acceptSocket.setLinger();
 			acceptSocket.setNonBlocking();            // 设置 acceptsocket 为非阻塞
 			addAcceptSocket(std::move(acceptSocket));
 		}
@@ -179,7 +180,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 
 	http::HttpParser httpParser(_value);
 	http::HttpRequest httpRequest = httpParser.parseHttpRequest();
-	std::cout << httpRequest.headerToString() << std::endl;    /////////////////////////////////////////////////////////////////////////
+	// std::cout << httpRequest.headerToString() << std::endl;    /////////////////////////////////////////////////////////////////////////
 	httpserver::HttpServerRequest httpServerRequest(std::move(httpRequest));
 	httpServerRequest.getSession() = &m_session;      // 传入 Session
 	httpServerRequest.getSQLServer() = m_SQLServer;   // 传入 SQLServer
@@ -218,14 +219,16 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	// 开始发送数据
 	std::string httpServerResqonseHeader = httpServerResqonse.headerToString();
 	std::cout << httpServerResqonse.headerToString() << std::endl; ///////////////////////////////////////////////////////////////////////
-	len = send(_acceptSocket.getSocketFd(), httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size(), 0);   // 先发送请求头部
-	
+	// len = send(_acceptSocket.getSocketFd(), httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size(), 0);   // 先发送请求头部
+	len = _acceptSocket.send(httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size());
+
 	if (filename != "") {
 		FILE* fp = fopen(filename.c_str(), "rb");   // 注意要以二进制的形式读取文件
 		if (fp != nullptr) {
 			while (1) {
 				len = fread(buffer, sizeof(char), sizeof(buffer), fp);
-				len = send(_acceptSocket.getSocketFd(), buffer, len, 0);
+				// len = send(_acceptSocket.getSocketFd(), buffer, len, 0);
+				len = _acceptSocket.send(buffer, len);
 				if (len < sizeof(buffer)) {
 					break;
 				}
@@ -260,7 +263,7 @@ void WebServer::checkClientState_threadFuntion()
 
 	while (1)
 	{
-		ptrRead = m_acceptSocketList;    // 注意 一开始 ptrRead 可能会变成 nullptr
+		ptrRead = m_acceptSocketList;   
 		while (ptrRead->next != nullptr)
 		{
 			tempSocket = &ptrRead->next->m_accpetSocket;
@@ -298,11 +301,10 @@ void WebServer::checkClientState_threadFuntion()
 					ptrRead->next = ptrRead->next->next;    // 不需要原子操作，因为上面已经判断了 ptrRead->next != m_ptrWrite
 					ptrRead = ptrRead->next;
 					delete(deleteNode);
+					continue;
 				}
 			}
-			else {
-				ptrRead = ptrRead->next;
-			}
+			ptrRead = ptrRead->next;
 		}
 	}
 

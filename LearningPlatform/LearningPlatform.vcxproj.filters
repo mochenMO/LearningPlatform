@@ -77,9 +77,6 @@
     <ClInclude Include="server\src\time\time.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="web\config\routeconfig.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="web\src\page\default.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -92,6 +89,9 @@
     <ClInclude Include="server\src\sql\sql.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="web\config\routeconfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="server\config\websever,json" />
@@ -100,5 +100,7 @@
     <None Include="web\static\default.html" />
     <None Include="web\static\html\default.html" />
     <None Include="web\static\html\login.html" />
+    <None Include="web\static\js\config.js" />
+    <None Include="README.md" />
   </ItemGroup>
 </Project>

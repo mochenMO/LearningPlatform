@@ -20,8 +20,11 @@ inline void defaultPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 {
 	std::cout << "defaultPageMainFuntion is OK" << std::endl;
 
+
+	// Session 是多线程不安全的，使用时需加锁。(目前用的是异步，不需要加锁)
 	route::Route* route = _httpServerRequest.getSession()->getParamter<route::Route*>("Route");    // 实现转发
 	route->getFunction("/login")(_httpServerRequest, _httpServerResqonse);                // 但有一个问题 getPDealHttpService 不会检测值是否存在
+
 }
 
 

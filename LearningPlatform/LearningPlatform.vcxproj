@@ -157,11 +157,13 @@
     <ClInclude Include="web\src\page\default.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="server\config\mimetypes.json" />
     <None Include="server\config\websever,json">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="server\config\webserver.json" />
+    <None Include="web\static\js\config.js" />
     <None Include="web\static\default.html" />
     <None Include="web\static\html\default.html" />
     <None Include="web\static\html\login.html" />

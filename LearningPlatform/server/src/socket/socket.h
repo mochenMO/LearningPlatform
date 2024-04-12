@@ -61,7 +61,7 @@ public:
 	int& getAddrlen();
 	
 	int recv(char* _buffer, int _bufferSize);
-	int send(char* _buffer, int _bufferSize);
+	int send(const char* _buffer, int _bufferSize);
 
 	void setNonBlocking();
 	void setReuseAddr();

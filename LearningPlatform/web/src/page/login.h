@@ -20,12 +20,27 @@ inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerReque
 {
 	// _httpServerResqonse.getFilename() = "web/static/default.html";
 
-	std::cout << "loginPageMainFuntion is OK" << std::endl;
+	std::cout << "loginPageMainFuntion is OK =====================================" << std::endl;
 
+	std::cout << _httpServerRequest.getData() << std::endl;
+
+	// json::JsonParser jr(std::move(_httpServerRequest.getData()));  // ??????????
+	// json::JsonParser jr(_httpServerRequest.getData());             // ??????????
+	json::JsonParser jr{};
+	jr.loadByString(_httpServerRequest.getData());
+	json::Json js = jr.parse();
+	std::string username = js["username"].getString();
+
+	std::cout << username << std::endl;
+
+	// SQLServer // Session 是多线程不安全的，使用时需加锁。(目前用的是异步，不需要加锁)
 	sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
 	sqlServer->openDataBase("LEARNING");
 	sql::SQLServer::SQLData data = sqlServer->select("select * from user_tb");
 	sqlServer->print(data);
+
+
+
 
 }
 

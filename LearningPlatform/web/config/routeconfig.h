@@ -22,12 +22,19 @@ inline route::Route* createRoute()
 	static route::Route route{};
 	route.getDefaultStaticFilePath() = "web/static";
 	
-	route.setStaticFile("/test", "/html/default.html");       // 注意文件路径开头有"/"
-	route.setStaticFile("/favicon.ico", "/img/favicon.ico");  
+	route.setStaticFile("/test", "/html/default.html");       ////////////// 
+
+	route.setStaticFile("/favicon.ico", "/img/favicon.ico");  // 注意文件路径开头有"/"
+	route.setStaticFile("/", "/html/login.html");
 	route.setStaticFile("/login", "/html/login.html");
 
-	route.setRoute("/default", &defaultPageMainFuntion);
-	route.setRoute("/login", &loginPageMainFuntion);
+
+	route.setRoute("/default", &defaultPageMainFuntion); //////////////
+
+	// route.setRoute("/", &loginPageMainFuntion);
+	route.setRoute("/login/src", &loginPageMainFuntion);
+
+
 
 	return &route;
 }

@@ -6,5 +6,6 @@
     "ODBCName": "mydb",
     "userName": "sa",
     "password": "123456789"
-  }
+  },
+  "jsConfigPath": "web/static/js/config.js"
 }
