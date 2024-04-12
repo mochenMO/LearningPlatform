@@ -1,3 +1,12 @@
+/*// 说明与介绍
+* 1.请注意编译器的编码格式，是多字节还是宽字节，该实现用的是宽字节。
+*
+*
+*
+*/
+
+
+
 #pragma once
 #ifndef _MOCHEN_SQL_H_
 #define _MOCHEN_SQL_H_

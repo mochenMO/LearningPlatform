@@ -76,8 +76,8 @@ private:
 private:
 	socket::WinSockLibrary *m_winSockLibrary;
 	socket::ServerSocket    m_serverSocket;
-	std::thread			    m_acceptThread;
-	std::thread			    m_checkThread;
+	std::thread             m_acceptThread;
+	std::thread             m_checkThread;
 	AcceptSocketList       *m_acceptSocketList;
 	AcceptSocketList       *m_ptrWrite;
 	LONGLONG                m_maxKeepTime;  // 保存计算机的运行次数

@@ -164,6 +164,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 				printf("recv()错误！！！\n");  // error.log访问日志记录 #$@#!$!@###########!@$#$#@!$#!$!@#$#$@#!$!@###########!@$#$#@!$#!$!@#$
 
 				InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::terminated);
+				_acceptSocket.clear();
 				return;
 			}
 			if (len < sizeof(buffer)) {   // 数据已读取完
@@ -238,7 +239,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 
 
 	// 短链接
-	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::working);  // 设置为终止状态
+	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::terminated);  // 设置为终止状态
 	_acceptSocket.clear();
 
 	// 长连接
