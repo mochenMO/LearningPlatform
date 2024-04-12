@@ -41,6 +41,11 @@ mochen::session::Session*& HttpServerRequest::getSession()
 }
 
 
+mochen::sql::SQLServer*& HttpServerRequest::getSQLServer()
+{
+	return m_SQLServer;
+}
+
 // ============================================================================================================
 // class HttpServerResqonse
 

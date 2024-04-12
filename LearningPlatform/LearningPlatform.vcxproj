@@ -136,6 +136,7 @@
     <ClCompile Include="server\src\route\route.cpp" />
     <ClCompile Include="server\src\session\session.h" />
     <ClCompile Include="server\src\socket\socket.cpp" />
+    <ClCompile Include="server\src\sql\sql.cpp" />
     <ClCompile Include="server\src\threadpool\threadpool.cpp" />
     <ClCompile Include="server\src\time\time.cpp" />
     <ClCompile Include="server\src\webserver\webserver.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="server\src\log\log.h" />
     <ClInclude Include="server\src\route\route.h" />
     <ClInclude Include="server\src\socket\socket.h" />
+    <ClInclude Include="server\src\sql\sql.h" />
     <ClInclude Include="server\src\threadpool\threadpool.h" />
     <ClInclude Include="server\src\time\time.h" />
     <ClInclude Include="server\src\webserver\webserver.h" />
@@ -162,6 +164,7 @@
     <None Include="server\config\webserver.json" />
     <None Include="web\static\default.html" />
     <None Include="web\static\html\default.html" />
+    <None Include="web\static\html\login.html" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,10 @@
 {
   "ip": "127.123.123.1",
   "port": 8888,
-  "maxWriteTime": 15
+  "maxWriteTime": 15,
+  "dataBase": {
+    "ODBCName": "mydb",
+    "userName": "sa",
+    "password": "123456789"
+  }
 }

@@ -77,10 +77,19 @@ WebServer::~WebServer()
 {
 	///////////////////////////////////////////////
 	// 实现关闭功能...
+	
+	
 
 	m_checkThread.join();
 	m_acceptThread.join();
+	
+	delete m_SQLServer;  // 注意：最后再delete，因为其他线程可能还要用
+}
 
+
+void WebServer::createSQLServer(const std::string& _ODBCName, const std::string& _userName, const std::string& _password)
+{
+	m_SQLServer = new sql::SQLServer(_ODBCName, _userName, _password);
 }
 
 void WebServer::startup()
@@ -141,9 +150,9 @@ void WebServer::acceptConnection_threadFuntion()
 void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _value)
 {
 	int len = _value.size();
-	char buffer[4094] = { 0 };
+	char buffer[4096] = { 0 };
 
-	if (len == 4094) {    // 等于缓冲区的大小，说明还有数据，则循环接收
+	if (len == sizeof(buffer)) {    // 等于缓冲区的大小，说明还有数据，则循环接收
 		while (1) {
 			int len = _acceptSocket.recv(buffer, 4094);
 			if (len > 0) {
@@ -157,7 +166,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 				InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::terminated);
 				return;
 			}
-			if (len < 4094) {   // 数据已读取完
+			if (len < sizeof(buffer)) {   // 数据已读取完
 				break;
 			}
 		}
@@ -171,7 +180,8 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	http::HttpRequest httpRequest = httpParser.parseHttpRequest();
 	std::cout << httpRequest.headerToString() << std::endl;    /////////////////////////////////////////////////////////////////////////
 	httpserver::HttpServerRequest httpServerRequest(std::move(httpRequest));
-	httpServerRequest.getSession() = &m_session;
+	httpServerRequest.getSession() = &m_session;      // 传入 Session
+	httpServerRequest.getSQLServer() = m_SQLServer;   // 传入 SQLServer
 	httpserver::HttpServerResqonse httpServerResqonse{};
 	// httpServerResqonse.setParamter("Connection", "close"); /////////////////////////////////////////////////////////////////////////
 
@@ -210,12 +220,12 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	len = send(_acceptSocket.getSocketFd(), httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size(), 0);   // 先发送请求头部
 	
 	if (filename != "") {
-		FILE* fp = fopen(filename.c_str(), "r");
+		FILE* fp = fopen(filename.c_str(), "rb");   // 注意要以二进制的形式读取文件
 		if (fp != nullptr) {
 			while (1) {
 				len = fread(buffer, sizeof(char), sizeof(buffer), fp);
 				len = send(_acceptSocket.getSocketFd(), buffer, len, 0);
-				if (len < 4096) {
+				if (len < sizeof(buffer)) {
 					break;
 				}
 			}

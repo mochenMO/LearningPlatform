@@ -51,6 +51,9 @@
     <ClCompile Include="web\src\page\login.h">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="server\src\sql\sql.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="server\src\log\log.h">
@@ -86,6 +89,9 @@
     <ClInclude Include="server\src\httpserver\httpserver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="server\src\sql\sql.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="server\config\websever,json" />
@@ -93,5 +99,6 @@
     <None Include="server\config\webserver.json" />
     <None Include="web\static\default.html" />
     <None Include="web\static\html\default.html" />
+    <None Include="web\static\html\login.html" />
   </ItemGroup>
 </Project>

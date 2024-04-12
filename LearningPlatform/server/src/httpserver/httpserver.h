@@ -6,6 +6,7 @@
 #include "../http/http.h"
 #include "../session/session.h"
 #include "../json/json.h"
+#include "../sql/sql.h"
 
 namespace mochen
 {
@@ -19,7 +20,8 @@ namespace httpserver
 class HttpServerRequest : public http::HttpRequest
 {
 private:
-	session::Session* m_session;
+	session::Session* m_session;   // 来自WebServer，不用delete
+	sql::SQLServer *m_SQLServer;   // 来自WebServer，不用delete
 public:
 	HttpServerRequest() = default;
 	HttpServerRequest(HttpRequest& _httpRequest);
@@ -33,6 +35,7 @@ public:
 	HttpServerRequest& operator = (HttpServerRequest&&) noexcept = delete;
 	
 	session::Session*& getSession();
+	sql::SQLServer*& getSQLServer();
 };
 
 

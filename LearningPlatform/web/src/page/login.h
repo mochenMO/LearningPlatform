@@ -22,6 +22,11 @@ inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerReque
 
 	std::cout << "loginPageMainFuntion is OK" << std::endl;
 
+	sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
+	sqlServer->openDataBase("LEARNING");
+	sql::SQLServer::SQLData data = sqlServer->select("select * from user_tb");
+	sqlServer->print(data);
+
 }
 
 

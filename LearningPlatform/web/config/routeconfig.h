@@ -24,6 +24,7 @@ inline route::Route* createRoute()
 	
 	route.setStaticFile("/test", "/html/default.html");       // 注意文件路径开头有"/"
 	route.setStaticFile("/favicon.ico", "/img/favicon.ico");  
+	route.setStaticFile("/login", "/html/login.html");
 
 	route.setRoute("/default", &defaultPageMainFuntion);
 	route.setRoute("/login", &loginPageMainFuntion);
