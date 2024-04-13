@@ -153,7 +153,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	int len = _value.size();
 	char buffer[4096] = { 0 };
 
-	if (len == sizeof(buffer)) {    // 等于缓冲区的大小，说明还有数据，则循环接收
+	if (len == (int)sizeof(buffer)) {    // 等于缓冲区的大小，说明还有数据，则循环接收
 		while (1) {
 			int len = _acceptSocket.recv(buffer, 4094);
 			if (len > 0) {
@@ -168,7 +168,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 				_acceptSocket.clear();
 				return;
 			}
-			if (len < sizeof(buffer)) {   // 数据已读取完
+			if (len < (int)sizeof(buffer)) {   // 数据已读取完
 				break;
 			}
 		}
@@ -213,23 +213,27 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	// 处理动态请求
 	if (m_route->isFindFunction(urlPath) == true){
 		m_route->getFunction(urlPath)(httpServerRequest, httpServerResqonse);
+		filename = httpServerResqonse.getFilename();
 	}
-
-
+	
 	// 开始发送数据
 	std::string httpServerResqonseHeader = httpServerResqonse.headerToString();
 	std::cout << httpServerResqonse.headerToString() << std::endl; ///////////////////////////////////////////////////////////////////////
 	// len = send(_acceptSocket.getSocketFd(), httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size(), 0);   // 先发送请求头部
 	len = _acceptSocket.send(httpServerResqonseHeader.c_str(), httpServerResqonseHeader.size());
 
-	if (filename != "") {
+
+	if (httpServerResqonse.getData() != "") {   // 注意：该网络模型，规定一个http报文只能发一个文件，如果需要一个http报文发多个文件，请使用压缩包。
+		len = _acceptSocket.send(httpServerResqonse.getData().c_str(), httpServerResqonse.getData().size());
+	}
+	else if (filename != "") {
 		FILE* fp = fopen(filename.c_str(), "rb");   // 注意要以二进制的形式读取文件
 		if (fp != nullptr) {
 			while (1) {
 				len = fread(buffer, sizeof(char), sizeof(buffer), fp);
 				// len = send(_acceptSocket.getSocketFd(), buffer, len, 0);
 				len = _acceptSocket.send(buffer, len);
-				if (len < sizeof(buffer)) {
+				if (len < (int)sizeof(buffer)) {
 					break;
 				}
 			}
@@ -276,6 +280,7 @@ void WebServer::checkClientState_threadFuntion()
 					InterlockedExchange((LONG*)&tempSocket->getState(), (LONG)AcceptSocket::State::working); // 设置为工作状态
 
 					m_threadPool.addTask(&WebServer::dealData_taskFuntion, this,std::ref(*tempSocket), std::string(buffer));   // 注意：*tempSocket是值类型要用 std::ref 转成引用类型
+
 
 					memset(buffer, 0, sizeof(buffer));
 				}

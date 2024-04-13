@@ -15,6 +15,8 @@ namespace page
 {
 
 
+using UserData = std::map<std::string, bool>;
+
 
 inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerRequest, httpserver::HttpServerResqonse& _httpServerResqonse)
 {
@@ -22,26 +24,44 @@ inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerReque
 
 	std::cout << "loginPageMainFuntion is OK =====================================" << std::endl;
 
-	std::cout << _httpServerRequest.getData() << std::endl;
-
-	// json::JsonParser jr(std::move(_httpServerRequest.getData()));  // ??????????
-	// json::JsonParser jr(_httpServerRequest.getData());             // ??????????
-	json::JsonParser jr{};
-	jr.loadByString(_httpServerRequest.getData());
+	// 获取用户输入的账号和密码
+	json::JsonParser jr(_httpServerRequest.getData());
 	json::Json js = jr.parse();
-	std::string username = js["username"].getString();
+	std::string uaccount = js["uaccount"].getString();
+	std::cout << uaccount << std::endl; //////////////////////////////////
 
-	std::cout << username << std::endl;
-
-	// SQLServer // Session 是多线程不安全的，使用时需加锁。(目前用的是异步，不需要加锁)
+	// 读取SqlServer中的用户数据
 	sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
 	sqlServer->openDataBase("LEARNING");
-	sql::SQLServer::SQLData data = sqlServer->select("select * from user_tb");
-	sqlServer->print(data);
+	sql::SQLServer::SQLData data = sqlServer->select("select * from user_tb where uaccount =  '" + uaccount + "'");
+	sqlServer->print(data);  //////////////////////////////////
+
+	// 判断是否登录成功
+	if (data.empty() == false && data[0]["upassword"] == js["upassword"].getString()) {
+		UserData userData;
+		if (_httpServerRequest.getSession()->isFind("userData") == false) {   // 判断有没有创建 userSession
+			_httpServerRequest.getSession()->setParamter<UserData>("userData", userData);
+		}
+		_httpServerRequest.getSession()->getParamter<UserData>("userData")[data[0]["uid"]] = true;
+
+		std::string cookieData = "sessionID=";
+		cookieData += data[0]["uid"];           // 这里 sessionID = uid
+		cookieData += ";";                      // 别忘了最后的';'
+		cookieData += "Path=/ ;";               // 设置为全局的cookie
+		_httpServerResqonse.setParamter("Set-Cookie", cookieData);
 
 
+		_httpServerResqonse.setParamter("Content-Type", "application/json");
+		_httpServerResqonse.getData() = "{\"islogin\":\"true\"}";
 
+		std::cout << "login OK =====================================" << std::endl;
+	}
+	else {
+		_httpServerResqonse.setParamter("Content-Type", "application/json");
+		_httpServerResqonse.getData() = "{\"islogin\":\"false\"}";
+	}
 
+	
 }
 
 

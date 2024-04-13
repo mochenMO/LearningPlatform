@@ -51,8 +51,11 @@ bool SQLServer::executeCommend(const std::string& _comment)
 	m_res = SQLAllocHandle(SQL_HANDLE_STMT, m_hdbc, &m_hstmt);        // 每次执行一条新的 SQL 语句时,都需要通过 SQLAllocHandle() 函数分配一个新的语句句柄,因为当执行完一条 SQL 语句后，ODBC 驱动程序将自动清除语句的状态
 	m_res = SQLExecDirect(m_hstmt, m_commend, SQL_NTS);               // 执行SQL语句，使用指定的数据库
 	memset(m_commend, 0, sizeof(m_commend));                          // 清空命令数据
+	
+	SQLCloseCursor(m_hstmt);
+	SQLFreeHandle(SQL_HANDLE_STMT, m_hstmt);
+
 	if (m_res != SQL_SUCCESS && m_res != SQL_SUCCESS_WITH_INFO) {
-		printf("logger logger logger\n");
 		return false;
 	}
 	return true;
@@ -85,12 +88,19 @@ SQLServer::SQLData SQLServer::select(const std::string& _comment)
 	SQLServer::SQLData data{};
 	std::vector<std::string> colNameArray{};
 
-	if (executeCommend(_comment) == false) {
+	mbstowcs(m_commend, _comment.c_str(), sizeof(m_commend));         // 将 char 转成 wchar_t 
+	m_res = SQLAllocHandle(SQL_HANDLE_STMT, m_hdbc, &m_hstmt);        // 每次执行一条新的 SQL 语句时,都需要通过 SQLAllocHandle() 函数分配一个新的语句句柄,因为当执行完一条 SQL 语句后，ODBC 驱动程序将自动清除语句的状态
+	m_res = SQLExecDirect(m_hstmt, m_commend, SQL_NTS);               // 执行SQL语句，使用指定的数据库
+	memset(m_commend, 0, sizeof(m_commend));
+
+	if (m_res != SQL_SUCCESS && m_res != SQL_SUCCESS_WITH_INFO) {
+		SQLCloseCursor(m_hstmt);
+		SQLFreeHandle(SQL_HANDLE_STMT, m_hstmt);
 		printf("logger logger logger\n");
 		return data;
 	}
 
-	m_res = SQLNumResultCols(m_hstmt, &m_numCols);    // 于获取该结果的列数
+	m_res = SQLNumResultCols(m_hstmt, &m_numCols);    // 获取该结果的列数
 
 	SQLWCHAR wcolName[SQL_MAX_COLUMN_NAME_LEN] = { 0 };
 	SQLSMALLINT colNameLen;
@@ -114,18 +124,19 @@ SQLServer::SQLData SQLServer::select(const std::string& _comment)
 	char tempData[1024] = { 0 };                 // 保存每一格的数据（这里用的char 不是 wchar）    
 	int numRow = 0;
 	while (SQLFetch(m_hstmt) == SQL_SUCCESS) {      // 开始获取数据，注意该函数是一行一行读取的。
-		data.push_back({});;
+		data.push_back({});
 		for (int i = 1; i <= m_numCols; ++i) {
 			m_res = SQLGetData(m_hstmt, i, SQL_C_CHAR, tempData, sizeof(tempData), NULL);  // 获取该行中第i格的数据，i∈[1,numCols]。注意他会把其他数据类型都转成 SQLCHAR 类型
-			if (m_res != SQL_SUCCESS && m_res != SQL_SUCCESS_WITH_INFO) {
-				printf("logger logger logger\n");
-				return data;
-			}
+			// if (res != SQL_SUCCESS && res != SQL_SUCCESS_WITH_INFO) return 1;   // 如果读取到了数据可以是null的，该判断语句会通过，从而导致数据缺失去
+			
 			data[numRow][colNameArray[i - 1]] = tempData;   // 注意：colNameArray[i-1]
 			memset(tempData, 0, sizeof(tempData));
 		}
 		++numRow;   // 获取下一行的的数据
 	}
+
+	SQLCloseCursor(m_hstmt);
+	SQLFreeHandle(SQL_HANDLE_STMT, m_hstmt);
 	return data;
 }
 

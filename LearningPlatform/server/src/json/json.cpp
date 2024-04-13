@@ -652,9 +652,9 @@ JsonParser::~JsonParser()
 	}
 }
 
-JsonParser::JsonParser(const std::string& _string)
+JsonParser::JsonParser(const std::string& _string) : JsonParser(_string.c_str())
 {
-	JsonParser(_string.c_str());
+	// JsonParser(_string.c_str());   // 错误！转发构造函数要写在初始化列表中。
 }
 
 

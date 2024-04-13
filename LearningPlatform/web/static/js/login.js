@@ -17,8 +17,8 @@ $(document).ready(function() {
   
       // 创建包含账号和密码的JSON对象
       let data = {
-        username: username,
-        password: password
+        uaccount: username,
+        upassword: password
       };
   
       // 发送POST请求
@@ -27,8 +27,15 @@ $(document).ready(function() {
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
-        success: function(response) {
-            window.location.replace(urlPath + "/test");
+          success: function (response) {
+
+            console.log(response);
+
+            if (response.islogin === "true") {   // {"islogin": "true"} 注意响应报文中的Content-Type也要设置为json
+                window.location.replace(urlPath + "/test");
+            } else {
+                alert('账号或密码错误');
+            }
         },
         error: function(xhr, status, error) {
           alert('发生错误：' + error);
