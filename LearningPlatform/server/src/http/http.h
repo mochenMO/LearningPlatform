@@ -2,9 +2,12 @@
 * 1.HttpParser内部不会判断，发来的是请求报文还响应报文，请用户先自行判断再调用对应的函数即可。
 * 2.使用 parseStringToKeyValuePairs 和 parseStringToArray 一定要保证相关格式的正确性，结尾处尽量也加上 _endString。
 * 3.使用 HttpParser 一定要保证 http 报文格式的正确性
+* 4.HTTP请求报文，字段名不能重复。HTTP响应报文，字段名可以重复，如 Set-Cookie。但是在该项目中由于用std::map存储，因此字段名都不能重复
+*
 * 
-* 
+*
 */
+
 
 
 
@@ -75,7 +78,7 @@ public:
 
 class HttpRequest
 {
-private:
+protected:
 	std::string m_method;
 	HttpURL m_url;
 	std::string m_version;
@@ -104,15 +107,15 @@ public:
 	std::string& getData();
 
 	std::string headerToString();
-public:
-	std::map<std::string, std::string> getCookie();
-	void setCookie(std::map<std::string, std::string>& _cookie);
+//public:
+//	std::map<std::string, std::string> getCookie();
+//	void setCookie(std::map<std::string, std::string>& _cookie);
 };
 
 
 class HttpResponse
 {
-private:
+protected:
 	std::string m_version;
 	std::string m_statusCode;
 	std::string m_statusDescription;

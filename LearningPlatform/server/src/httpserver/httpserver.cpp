@@ -25,12 +25,18 @@ mochen::json::Json* getContentTypeConfig()
 // ============================================================================================================
 // class HttpServerRequest
 
-HttpServerRequest::HttpServerRequest(HttpRequest& _httpRequest) : HttpRequest(_httpRequest)
+HttpServerRequest::HttpServerRequest(HttpRequest& _httpRequest)
+	: HttpRequest(_httpRequest),
+	m_SQLServer(nullptr),
+	m_session(nullptr)
 {
 
 }
 
-HttpServerRequest::HttpServerRequest(HttpRequest&& _httpRequest) : HttpRequest(std::move(_httpRequest))
+HttpServerRequest::HttpServerRequest(HttpRequest&& _httpRequest) 
+	: HttpRequest(std::move(_httpRequest)),
+	m_SQLServer(nullptr),
+	m_session(nullptr)
 {
 
 }
@@ -45,6 +51,47 @@ mochen::sql::SQLServer*& HttpServerRequest::getSQLServer()
 {
 	return m_SQLServer;
 }
+
+
+std::map<std::string, std::string> HttpServerRequest::getCookie()
+{
+	std::map<std::string, std::string> res{};
+	const char* str;
+
+	if (isFindParamter("Cookie") == true) {
+		str = m_parameters["Cookie"].c_str();
+		res = http::parseStringToKeyValuePairs(str, str + strlen(str), "=", ";");
+	}
+	else {
+		printf("Cookie is not find\n");   // #$#@%@#!$$$$$$$$$$$$$$$$$$$$$$$$$$$%$!%!#@%!$#%!#%!#%!#%!#%!#%!#%!#%
+	}
+	return res;
+}
+
+
+
+void HttpServerRequest::addCookie(mochen::http::Cookie& _cookie)
+{
+	std::string& value = m_parameters["Cookie"];   // 注意：用引用接收返回值
+	value += _cookie.getName();
+	value += "=";
+	value += _cookie.getValue();
+	value += ";";
+}
+
+
+
+void HttpServerRequest::addCookie(std::vector<mochen::http::Cookie>& _cookies)
+{
+	std::string& value = m_parameters["Cookie"];   // 注意：用引用接收返回值
+	for (auto it = _cookies.begin(); it != _cookies.end(); ++it) {
+		value += it->getName();
+		value += "=";
+		value += it->getValue();
+		value += ";";
+	}
+}
+
 
 // ============================================================================================================
 // class HttpServerResqonse
@@ -63,5 +110,50 @@ std::string& HttpServerResqonse::getFilename()
 
 std::string HttpServerResqonse::getContentType(const std::string& _fileSuffixName)
 {
-	return (*m_mineTypeConfig)[_fileSuffixName].getString();
+	return (*m_mineTypeConfig)[_fileSuffixName].asString();
+}
+
+
+void HttpServerResqonse::setData(const std::string& _fileSuffixName, const std::string& _data)
+{
+	std::string contentType = getContentType(_fileSuffixName);
+	if (contentType != "") {
+		m_parameters["Content-Type"] = contentType;
+	}
+	else {
+		printf("not find contentType logger logger\n"); /////////////////////////////////////////////////////////////////////////
+		return;
+	}
+	m_data = _data;
+}
+
+
+void HttpServerResqonse::addCookie(mochen::http::Cookie& _cookie)
+{
+	std::string& value = m_parameters["Set-Cookie"];   // 注意：用引用接收返回值
+	if (value.empty() == false) {
+		//if (value[value.size() - 1] == ';') {  // 要一次性发多个cookie
+		//	value.erase(value.size() - 1);   // 删除结尾的";"
+		//	value += ", ";                    // 用逗号","连接
+		//}
+
+		value += "\r\nSet-Cookie:";
+
+	}
+	value += _cookie.toString();
+}
+
+
+
+void HttpServerResqonse::addCookie(std::vector<mochen::http::Cookie>& _cookies)
+{
+	std::string& value = m_parameters["Set-Cookie"];   // 注意：用引用接收返回值
+	int size = _cookies.size();
+
+	for (int i = 0; i < size; ++i) {
+		value += _cookies[i].toString();
+		if (i + 1 < size) {
+			value += "\r\nSet-Cookie:";
+		}
+	}
 }

@@ -4,9 +4,12 @@
 
 
 #include "../http/http.h"
+#include "../http/cookie.h"
 #include "../session/session.h"
 #include "../json/json.h"
 #include "../sql/sql.h"
+
+
 
 namespace mochen
 {
@@ -36,6 +39,10 @@ public:
 	
 	session::Session*& getSession();
 	sql::SQLServer*& getSQLServer();
+public:
+	std::map<std::string, std::string> getCookie();
+	void addCookie(http::Cookie& _cookie);
+	void addCookie(std::vector<http::Cookie>& _cookies);
 };
 
 
@@ -58,6 +65,12 @@ public:
 
 	std::string& getFilename();
 	std::string getContentType(const std::string& _fileSuffixName);
+public:
+	void setData(const std::string& _fileSuffixName, const std::string& _data);
+
+	// std::vector<http::Cookie> getCookie();       // 暂时没有getCookie的需求，其实现需要解析字符串     
+	void addCookie(http::Cookie& _cookie);          // 注意该函数内部实现与 HttpServerRequest 中的 getCookie 不一样，这里处理的是Set-Cookie
+	void addCookie(std::vector<http::Cookie>& _cookies);
 };
 
 

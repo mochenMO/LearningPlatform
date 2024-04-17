@@ -54,6 +54,9 @@
     <ClCompile Include="server\src\sql\sql.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="server\src\http\cookie.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="server\src\log\log.h">
@@ -90,6 +93,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="web\config\routeconfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="server\src\http\cookie.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

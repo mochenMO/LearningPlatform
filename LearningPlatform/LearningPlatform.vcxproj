@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="server\src\httpserver\httpserver.cpp" />
+    <ClCompile Include="server\src\http\cookie.cpp" />
     <ClCompile Include="server\src\http\http.cpp" />
     <ClCompile Include="server\src\json\json.cpp" />
     <ClCompile Include="server\src\log\log.cpp" />
@@ -144,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="server\src\httpserver\httpserver.h" />
+    <ClInclude Include="server\src\http\cookie.h" />
     <ClInclude Include="server\src\http\http.h" />
     <ClInclude Include="server\src\json\json.h" />
     <ClInclude Include="server\src\log\log.h" />

@@ -189,7 +189,7 @@ void Json::operator=(const char* _value)
 	m_value.m_string = new std::string(_value);
 }
 
-bool Json::isHaveValue(const std::string& _key)
+bool Json::isFindValue(const std::string& _key)
 {
 	if (m_type != Type::json_object) {
 		logger_error(JsonLogger, "Json::isHaveValue(): type error, Jsonis not a json_object type");
@@ -199,13 +199,13 @@ bool Json::isHaveValue(const std::string& _key)
 }
 
 
-bool Json::isHaveValue(int _index)
+bool Json::isFindValue(int _index)
 {
 	if (m_type != Type::json_array) {
 		logger_error(JsonLogger, "Json::isHaveValue(): type error, Json is not a json_array type");
 		return false;
 	}
-	return (m_value.m_object->size() > _index);
+	return ((int)m_value.m_object->size() > _index);   // 注意无符号的比较，要转成无符号比较
 }
 
 Json& Json::operator[](const std::string& _key) // 通常[]运算符重载，没有边界检查且会创建新值。 
@@ -276,7 +276,7 @@ Json& Json::at(int _index)  // 通常at函数有边界检查但不会创建新值
 	return (*(m_value.m_array))[_index];
 }
 
-bool Json::getBool()
+bool Json::asBool()
 {
 	if (m_type != Type::json_bool) {
 		logger_error(JsonLogger, "Json::getBool(): type error, Json is not a json_bool type");
@@ -288,7 +288,7 @@ bool Json::getBool()
 }
 
 
-int	Json::getInt()
+int	Json::asInt()
 {
 	if (m_type != Type::json_int) {
 		logger_error(JsonLogger, "Json::getInt(): type error, Json is not a json_int type");
@@ -299,7 +299,7 @@ int	Json::getInt()
 	}
 }
 
-double Json::getDouble()
+double Json::asDouble()
 {
 	if (m_type != Type::json_double) {
 		logger_error(JsonLogger, "Json::getDouble(): type error, Json is not a json_double type");
@@ -312,7 +312,7 @@ double Json::getDouble()
 }
 
 
-std::string Json::getString()
+std::string Json::asString()
 {
 	if (m_type != Type::json_string) {
 		logger_error(JsonLogger, "Json::getString(): type error, Json is not a json_string type");
@@ -323,7 +323,7 @@ std::string Json::getString()
 	}
 }
 
-std::vector<Json> Json::getArray()
+std::vector<Json> Json::asArray()
 {
 	if (m_type != Type::json_array) {
 		logger_error(JsonLogger, "Json::getArray(): type error, Json is not a json_array type");
@@ -334,7 +334,7 @@ std::vector<Json> Json::getArray()
 	}
 }
 
-std::map<std::string, Json> Json::getObject()
+std::map<std::string, Json> Json::asObject()
 {
 	if (m_type != Type::json_object) {
 		logger_error(JsonLogger, "Json::getObject(): type error, Json is not a json_object type");
@@ -721,7 +721,7 @@ char JsonParser::getNextValidChar()
 {
 	while (m_string[m_index] == ' ' 
 		|| m_string[m_index] == '\n' 
-		|| m_string[m_index] == '\n' 
+		|| m_string[m_index] == '\r' 
 		|| m_string[m_index] == '\t') 
 	{
 		++m_index;

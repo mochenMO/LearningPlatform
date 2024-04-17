@@ -17,7 +17,7 @@ ThreadPool::~ThreadPool()
 }
 
 
-void ThreadPool::threadFuntion()
+void ThreadPool::threadFunction()
 {
 	std::function<void()> function;
 	bool isEmpty;
@@ -51,7 +51,7 @@ void ThreadPool::startup()
 	m_maxSize = 1;  // 单线程异步
 
 	for (int i = 0; i < m_maxSize; ++i) {
-		std::thread t(&ThreadPool::threadFuntion, this);
+		std::thread t(&ThreadPool::threadFunction, this);
 		m_threadArray.push_back(std::move(t));    // std::thread 只能进行移动操作
 	}
 }

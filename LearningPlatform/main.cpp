@@ -16,19 +16,19 @@ int main()
 	jsonParser.open("server/config/webserver.json");
 	json::Json data = jsonParser.parse();
 
-	webserver::WebServer webServer(data["ip"].getString(), data["port"].getInt());
-	webServer.getMaxKeepTime() = data["maxWriteTime"].getInt();
-	webServer.createSQLServer(data["dataBase"]["ODBCName"].getString(),
-		data["dataBase"]["userName"].getString(),
-		data["dataBase"]["password"].getString());
+	webserver::WebServer webServer(data["ip"].asString(), data["port"].asInt());
+	webServer.getMaxKeepTime() = data["maxWriteTime"].asInt();
+	webServer.createSQLServer(data["dataBase"]["ODBCName"].asString(),
+		data["dataBase"]["userName"].asString(),
+		data["dataBase"]["password"].asString());
 
 	// 配置 config.js
-	FILE* fp = fopen(data["jsConfigPath"].getString().c_str(), "w");
+	FILE* fp = fopen(data["jsConfigPath"].asString().c_str(), "w");
 	if (fp == nullptr) {
 		printf("fopen() \n");  // !@#$#@$!#$!#$!#@$!#$!#$!#$!#$!#$
 		return -1;
 	}
-	fprintf(fp, "let urlPath = \"http://%s:%d\"", data["ip"].getString().c_str(), data["port"].getInt());   // let urlPath = "http://127.123.123.1:8888"
+	fprintf(fp, "let urlPath = \"http://%s:%d\"", data["ip"].asString().c_str(), data["port"].asInt());   // let urlPath = "http://127.123.123.1:8888"
 	fclose(fp);
 
 	webServer.startup();  // 注意：完全初始化 WebServer 内部所需的资源后，最后再调用 startup 函数

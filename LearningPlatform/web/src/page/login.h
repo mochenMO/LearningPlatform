@@ -27,7 +27,7 @@ inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerReque
 	// 获取用户输入的账号和密码
 	json::JsonParser jr(_httpServerRequest.getData());
 	json::Json js = jr.parse();
-	std::string uaccount = js["uaccount"].getString();
+	std::string uaccount = js["uaccount"].asString();
 	std::cout << uaccount << std::endl; //////////////////////////////////
 
 	// 读取SqlServer中的用户数据
@@ -37,28 +37,29 @@ inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerReque
 	sqlServer->print(data);  //////////////////////////////////
 
 	// 判断是否登录成功
-	if (data.empty() == false && data[0]["upassword"] == js["upassword"].getString()) {
+	if (data.empty() == false && data[0]["upassword"] == js["upassword"].asString()) {
 		UserData userData;
 		if (_httpServerRequest.getSession()->isFind("userData") == false) {   // 判断有没有创建 userSession
 			_httpServerRequest.getSession()->setParamter<UserData>("userData", userData);
 		}
-		_httpServerRequest.getSession()->getParamter<UserData>("userData")[data[0]["uid"]] = true;
+		_httpServerRequest.getSession()->getParamter<UserData>("userData")[data[0]["uid"]] = true;   // 开启自动登录
 
-		std::string cookieData = "sessionID=";
-		cookieData += data[0]["uid"];           // 这里 sessionID = uid
-		cookieData += ";";                      // 别忘了最后的';'
-		cookieData += "Path=/ ;";               // 设置为全局的cookie
-		_httpServerResqonse.setParamter("Set-Cookie", cookieData);
+		// 设置 Cookie
+		http::Cookie cookie;
+		cookie.setParamter("sessionID", data[0]["uid"]); // 这里 sessionID = uid
+		cookie.getMaxAge() = std::to_string(60 * 60 * 24 * 15);                  // 保存时间为15天            
+ 		cookie.getPath() = "/";
+		_httpServerResqonse.addCookie(cookie);
 
-
-		_httpServerResqonse.setParamter("Content-Type", "application/json");
-		_httpServerResqonse.getData() = "{\"islogin\":\"true\"}";
+		_httpServerResqonse.setData("json", "{\"islogin\":\"true\"}");
 
 		std::cout << "login OK =====================================" << std::endl;
 	}
 	else {
-		_httpServerResqonse.setParamter("Content-Type", "application/json");
-		_httpServerResqonse.getData() = "{\"islogin\":\"false\"}";
+		// _httpServerResqonse.setParamter("Content-Type", "application/json");
+		// _httpServerResqonse.getData() = "{\"islogin\":\"false\"}";
+
+		_httpServerResqonse.setData("json", "{\"islogin\":\"false\"}");
 	}
 
 	

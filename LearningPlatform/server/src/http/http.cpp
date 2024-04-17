@@ -73,8 +73,10 @@ std::string mochen::http::parseKeyValuePairsToString(std::map<std::string, std::
 
 	for(auto it = _KeyValuePairs.begin(); it != _KeyValuePairs.end(); ++it){
 		res += it->first;
-		res += _separateString;
-		res += it->second;
+		if (it->second != "") {   // 判断是不是只有key
+			res += _separateString;
+			res += it->second;
+		}
 		res += _endString;
 	}
 	return res;
@@ -292,27 +294,27 @@ std::string HttpRequest::headerToString()
 	return str;
 }
 
-std::map<std::string, std::string> HttpRequest::getCookie()
-{
-	std::map<std::string, std::string> res{};
-	const char* str;
-
-	if (isFindParamter("Cookie") == true) {
-		str = getParamter("Cookie").c_str();
-		res = parseStringToKeyValuePairs(str, str + strlen(str), "=", ";");
-	}
-	else {
-		printf("Cookie is not find\n");   // #$#@%@#!$$$$$$$$$$$$$$$$$$$$$$$$$$$%$!%!#@%!$#%!#%!#%!#%!#%!#%!#%!#%
-	}
-	return res;
-}
-
-
-void HttpRequest::setCookie(std::map<std::string, std::string>& _cookie)
-{
-	std::string res = std::move(parseKeyValuePairsToString(_cookie, "=", ";"));
-	m_parameters["Cookie"] = res;
-}
+//std::map<std::string, std::string> HttpRequest::getCookie()
+//{
+//	std::map<std::string, std::string> res{};
+//	const char* str;
+//
+//	if (isFindParamter("Cookie") == true) {
+//		str = getParamter("Cookie").c_str();
+//		res = parseStringToKeyValuePairs(str, str + strlen(str), "=", ";");
+//	}
+//	else {
+//		printf("Cookie is not find\n");   // #$#@%@#!$$$$$$$$$$$$$$$$$$$$$$$$$$$%$!%!#@%!$#%!#%!#%!#%!#%!#%!#%!#%
+//	}
+//	return res;
+//}
+//
+//
+//void HttpRequest::setCookie(std::map<std::string, std::string>& _cookie)
+//{
+//	std::string res = std::move(parseKeyValuePairsToString(_cookie, "=", ";"));
+//	m_parameters["Cookie"] = res;
+//}
 
 
 // =============================================================================================================

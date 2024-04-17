@@ -61,6 +61,7 @@ WebServer::WebServer(const std::string& _ip, USHORT _port, int _af, int _type, i
 	m_acceptThread(),
 	m_checkThread(),
 	m_threadPool(),
+	m_SQLServer(nullptr),
 	m_session()
 {
 	m_acceptSocketList = new AcceptSocketList();

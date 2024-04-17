@@ -37,7 +37,7 @@ public:
 
 	~ThreadPool();
 
-	void threadFuntion();
+	void threadFunction();
 
 	void startup();
 

@@ -119,8 +119,8 @@ public:
 	void operator=(const std::string& _value);
 	void operator=(const char* _value);          // 写一个const char*的重载版本，解决const char*优先匹配bool的问题
 
-	bool isHaveValue(const std::string& _key);  
-	bool isHaveValue(int _index);               
+	bool isFindValue(const std::string& _key);  
+	bool isFindValue(int _index);
 
 	Json& operator[](const std::string& _key);   // 通常[]运算符重载函数，没有边界检查且会创建新值。
 	Json& operator[](int _index);               
@@ -128,12 +128,12 @@ public:
 	Json& at(const std::string& _key);           // 通常at函数有边界检查且不会创建新值
 	Json& at(int _index);
 
-	bool getBool();   // 注意，当类型不匹配时输出的值是未知的
-	int	getInt();                              
-	double getDouble();                        
-	std::string getString();    // 注意返回值类型
-	std::vector<Json> getArray();              
-	std::map<std::string, Json> getObject();   
+	bool asBool();   // 注意，当类型不匹配时输出的值是未知的
+	int	asInt();                              
+	double asDouble();                        
+	std::string asString();    // 注意返回值类型
+	std::vector<Json> asArray();              
+	std::map<std::string, Json> asObject();   
 
 	bool isNull();
 	bool isBool();   

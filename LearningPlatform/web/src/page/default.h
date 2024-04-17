@@ -41,8 +41,9 @@ inline void defaultPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 	}
 	_httpServerResqonse.getFilename() = route->getDefaultStaticFilePath() + "/html/login.html";
 	
-
-
+	//_httpServerResqonse.getStatusCode() = "302";
+	//_httpServerResqonse.getStatusDescription() = "Found";
+	//_httpServerResqonse.setParamter("Location", "http:://127.0.0.1:8888/login");
 
 	// 实现转发。注意 Session 是多线程不安全的，使用时需加锁。(目前用的是异步，不需要加锁)
 	// route::Route* route = _httpServerRequest.getSession()->getParamter<route::Route*>("Route");    
