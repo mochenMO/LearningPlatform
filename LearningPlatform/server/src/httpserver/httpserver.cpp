@@ -132,17 +132,10 @@ void HttpServerResqonse::addCookie(mochen::http::Cookie& _cookie)
 {
 	std::string& value = m_parameters["Set-Cookie"];   // 注意：用引用接收返回值
 	if (value.empty() == false) {
-		//if (value[value.size() - 1] == ';') {  // 要一次性发多个cookie
-		//	value.erase(value.size() - 1);   // 删除结尾的";"
-		//	value += ", ";                    // 用逗号","连接
-		//}
-
-		value += "\r\nSet-Cookie:";
-
+		value += "\r\nSet-Cookie:";     // 后面的Set - Cookie全部按值处理
 	}
 	value += _cookie.toString();
 }
-
 
 
 void HttpServerResqonse::addCookie(std::vector<mochen::http::Cookie>& _cookies)
@@ -153,7 +146,7 @@ void HttpServerResqonse::addCookie(std::vector<mochen::http::Cookie>& _cookies)
 	for (int i = 0; i < size; ++i) {
 		value += _cookies[i].toString();
 		if (i + 1 < size) {
-			value += "\r\nSet-Cookie:";
+			value += "\r\nSet-Cookie:"; // 后面的Set - Cookie全部按值处理
 		}
 	}
 }

@@ -5,7 +5,7 @@
 *	方法一：写两个Set-Cookie中（由于http报文用std::map存键值对的，不能存两个Set-Cookie，因此后面的Set-Cookie全部按值处理）
 *   Set-Cookie: cookie1=value1; Path=/; Max-Age = 3600
 *   Set-Cookie: cookie2=value2; Path=/; Max-Age = 3600
-*   方法二：写在一个Set-Cookie中，并用","分隔 (可能只取第一个Cookie值)
+*   方法二：写在一个Set-Cookie中，并用","分隔 (浏览器可能解析不出来，只取第一个Cookie值)
 *   Set-Cookie: cookie1=value1; Path=/; Max-Age = 3600, cookie2=value2; Path=/; Max-Age = 3600
 */
 
