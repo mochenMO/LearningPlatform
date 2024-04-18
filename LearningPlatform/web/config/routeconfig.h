@@ -29,12 +29,12 @@ inline route::Route* createRoute()
 
 
 	//route.setStaticFile("/", "/html/login.html");
-	//route.setStaticFile("/login", "/html/login.html");
+	route.setStaticFile("/login", "/html/login.html");
 	// route.setRoute("/default", &defaultPageMainFuntion); //////////////
 
 	// 设置动态路由
-	route.setRoute("/", &defaultPageMainFuntion);      // defaultPageMainFuntion 用于实现自动登录
-	route.setRoute("/login", &defaultPageMainFuntion);   
+	route.setRoute("/", &defaultPageMainFuntion);      // defaultPageMainFuntion 实现"/"重定向到主页面，从而实现自动登录，注意其不会阻止用户强行跳转到登录页面
+	// route.setRoute("/login", &defaultPageMainFuntion);   
 
 	route.setRoute("/login/src", &loginPageMainFuntion);
 

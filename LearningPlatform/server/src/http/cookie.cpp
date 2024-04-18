@@ -10,7 +10,7 @@ Cookie::Cookie(const std::string& _name, const std::string& _value)
 	m_domain(""),
 	m_path(""),
 	m_secure(""),
-	m_HttpOnly(""),
+	m_httpOnly(""),
 	m_sameSite("")
 {
 
@@ -60,7 +60,7 @@ bool Cookie::isSetSecure()
 
 bool Cookie::isSetHttpOnly()
 {
-	return (m_HttpOnly != "");
+	return (m_httpOnly != "");
 }
 
 void Cookie::setSecure(bool _value)
@@ -77,7 +77,7 @@ void Cookie::setHttpOnly(bool _value)
 	if (isSetHttpOnly() == _value) {
 		return;
 	}
-	m_HttpOnly = _value == true ? "Secure" : "";
+	m_httpOnly = _value == true ? "Secure" : "";
 }
 
 
@@ -120,7 +120,7 @@ std::string Cookie::toString()
 		res += "Secure;";
 	}
 	
-	if (m_HttpOnly != "") {
+	if (m_httpOnly != "") {
 		res += "HttpOnly;";
 	}
 

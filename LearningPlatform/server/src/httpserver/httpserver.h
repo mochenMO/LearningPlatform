@@ -71,6 +71,8 @@ public:
 	// std::vector<http::Cookie> getCookie();       // 暂时没有getCookie的需求，其实现需要解析字符串     
 	void addCookie(http::Cookie& _cookie);          // 注意该函数内部实现与 HttpServerRequest 中的 getCookie 不一样，这里处理的是Set-Cookie
 	void addCookie(std::vector<http::Cookie>& _cookies);
+
+	void redirect(const std::string& _urlPath);     // 临时重定向
 };
 
 

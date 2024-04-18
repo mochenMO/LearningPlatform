@@ -41,8 +41,8 @@ class Socket
 {
 protected:
 	SOCKET m_socketFd;
-	sockaddr_in m_sockaddr;
-	int m_addrlen;
+	sockaddr_in m_sockAddr;
+	int m_addrLen;
 public:
 	Socket() = default;
 	Socket(const std::string& _ip, USHORT _port, int _af, int _type, int _protocol);
@@ -57,8 +57,8 @@ public:
 	void clear();
 
 	SOCKET& getSocketFd();       // 注意返回的在引用类型
-	sockaddr_in& getSockaddr();
-	int& getAddrlen();
+	sockaddr_in& getSockAddr();
+	int& getAddrLen();
 	
 	int recv(char* _buffer, int _bufferSize);
 	int send(const char* _buffer, int _bufferSize);

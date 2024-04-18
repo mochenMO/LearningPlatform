@@ -85,7 +85,7 @@ private:
 	LONGLONG                m_maxKeepTime;  // 保存计算机的运行次数
 	threadpool::ThreadPool  m_threadPool;
 	route::Route           *m_route;        // 来自staic全局变量，不用delete
-	sql::SQLServer         *m_SQLServer;    // sql::SQLServer很大所以要存指针，节约栈空间
+	sql::SQLServer         *m_sqlServer;    // sql::SQLServer很大所以要存指针，节约栈空间
 	session::Session        m_session;
 public:
 	WebServer(const std::string& _ip, USHORT _port, int _af = AF_INET, int _type = SOCK_STREAM, int _protocol = IPPROTO_TCP);

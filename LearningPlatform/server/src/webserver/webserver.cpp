@@ -23,8 +23,8 @@ AcceptSocket::AcceptSocket() : Socket()
 AcceptSocket::AcceptSocket(AcceptSocket&& _value) noexcept
 {
 	m_socketFd = _value.m_socketFd;
-	m_sockaddr = _value.m_sockaddr;
-	m_addrlen = _value.m_addrlen;
+	m_sockAddr = _value.m_sockAddr;
+	m_addrLen = _value.m_addrLen;
 	m_waitingTime = _value.m_waitingTime;
 	m_state = _value.m_state;
 	_value.m_socketFd = INVALID_SOCKET;
@@ -34,8 +34,8 @@ void AcceptSocket::operator=(AcceptSocket&& _value) noexcept
 {
 	clear();
 	m_socketFd = _value.m_socketFd;
-	m_sockaddr = _value.m_sockaddr;
-	m_addrlen = _value.m_addrlen;
+	m_sockAddr = _value.m_sockAddr;
+	m_addrLen = _value.m_addrLen;
 	m_waitingTime = _value.m_waitingTime;
 	m_state = _value.m_state;
 	_value.m_socketFd = INVALID_SOCKET;
@@ -61,7 +61,7 @@ WebServer::WebServer(const std::string& _ip, USHORT _port, int _af, int _type, i
 	m_acceptThread(),
 	m_checkThread(),
 	m_threadPool(),
-	m_SQLServer(nullptr),
+	m_sqlServer(nullptr),
 	m_session()
 {
 	m_acceptSocketList = new AcceptSocketList();
@@ -84,13 +84,13 @@ WebServer::~WebServer()
 	m_checkThread.join();
 	m_acceptThread.join();
 	
-	delete m_SQLServer;  // 注意：最后再delete，因为其他线程可能还要用
+	delete m_sqlServer;  // 注意：最后再delete，因为其他线程可能还要用
 }
 
 
 void WebServer::createSQLServer(const std::string& _ODBCName, const std::string& _userName, const std::string& _password)
 {
-	m_SQLServer = new sql::SQLServer(_ODBCName, _userName, _password);
+	m_sqlServer = new sql::SQLServer(_ODBCName, _userName, _password);
 }
 
 void WebServer::startup()
@@ -184,7 +184,7 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	// std::cout << httpRequest.headerToString() << std::endl;    /////////////////////////////////////////////////////////////////////////
 	httpserver::HttpServerRequest httpServerRequest(std::move(httpRequest));
 	httpServerRequest.getSession() = &m_session;      // 传入 Session
-	httpServerRequest.getSQLServer() = m_SQLServer;   // 传入 SQLServer
+	httpServerRequest.getSQLServer() = m_sqlServer;   // 传入 SQLServer
 	httpserver::HttpServerResqonse httpServerResqonse{};
 	// httpServerResqonse.setParamter("Connection", "close"); /////////////////////////////////////////////////////////////////////////
 

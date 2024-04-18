@@ -32,14 +32,14 @@ Socket::Socket(const std::string& _ip, USHORT _port, int _af, int _type, int _pr
 		return;
 	}
 
-	m_sockaddr.sin_family = _af;
-	m_sockaddr.sin_port = htons(_port);
-	int res = inet_pton(_af, _ip.c_str(), &m_sockaddr.sin_addr.s_addr);
+	m_sockAddr.sin_family = _af;
+	m_sockAddr.sin_port = htons(_port);
+	int res = inet_pton(_af, _ip.c_str(), &m_sockAddr.sin_addr.s_addr);
 	if (res != 1) {
 		printf("inet_pton() failed\n");   // @!#!#@!$#@$#@%%#@$$$$$$$$$$$$$$$$$$$$$!@#!@#@!#!@#@!#@!#
 	}
 
-	m_addrlen = sizeof(m_sockaddr);
+	m_addrLen = sizeof(m_sockAddr);
 }
 
 
@@ -52,8 +52,8 @@ Socket::~Socket()
 Socket::Socket(Socket&& _value) noexcept
 {
 	m_socketFd = _value.m_socketFd;
-	m_sockaddr = _value.m_sockaddr;
-	m_addrlen = _value.m_addrlen;
+	m_sockAddr = _value.m_sockAddr;
+	m_addrLen = _value.m_addrLen;
 	_value.m_socketFd = INVALID_SOCKET;
 }
 
@@ -61,8 +61,8 @@ void Socket::operator=(Socket&& _value) noexcept
 {
 	clear();
 	m_socketFd = _value.m_socketFd;
-	m_sockaddr = _value.m_sockaddr;
-	m_addrlen = _value.m_addrlen;
+	m_sockAddr = _value.m_sockAddr;
+	m_addrLen = _value.m_addrLen;
 	_value.m_socketFd = INVALID_SOCKET;
 }
 
@@ -80,14 +80,14 @@ SOCKET& Socket::getSocketFd()       // 注意返回的在引用类型
 	return m_socketFd;
 }
 
-sockaddr_in& Socket::getSockaddr()
+sockaddr_in& Socket::getSockAddr()
 {
-	return m_sockaddr;
+	return m_sockAddr;
 }
 
-int& Socket::getAddrlen()
+int& Socket::getAddrLen()
 {
-	return m_addrlen;
+	return m_addrLen;
 }
 
 int Socket::recv(char* _buffer, int _bufferSize)
@@ -215,7 +215,7 @@ ServerSocket::~ServerSocket()
 
 void ServerSocket::bind() 
 {
-	int res = ::bind(m_socketFd, (struct sockaddr*)&m_sockaddr, m_addrlen);
+	int res = ::bind(m_socketFd, (struct sockaddr*)&m_sockAddr, m_addrLen);
 	if (res != 0) {
 		printf("bind() failed\n");   // @!#!#@!$#@$#@%%#@$$$$$$$$$$$$$$$$$$$$$!@#!@#@!#!@#@!#@!#
 	}
@@ -231,7 +231,7 @@ void ServerSocket::listen(int _backlog)
 
 SOCKET ServerSocket::accept(struct sockaddr* _sockaddr, int* _addrLen) 
 {
-	return ::accept(m_socketFd, (struct sockaddr*)&m_sockaddr, &m_addrlen);
+	return ::accept(m_socketFd, (struct sockaddr*)&m_sockAddr, &m_addrLen);
 }
 
 
@@ -251,7 +251,7 @@ ClinetSocket::~ClinetSocket()
 
 void ClinetSocket::connect()
 {
-	int res = ::connect(m_socketFd, (struct sockaddr*)&m_sockaddr, m_addrlen);
+	int res = ::connect(m_socketFd, (struct sockaddr*)&m_sockAddr, m_addrLen);
 	if (res != 0) {
 		printf("connect() failed\n");   // #@%$!#$%^#$!@^$%^%$@%#$%!@$#@%!$#$#$#$#$#$#$#$#$#$#$#%!#$
 	}

@@ -109,4 +109,7 @@
     <None Include="web\static\js\config.js" />
     <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="server\logs\json.log" />
+  </ItemGroup>
 </Project>

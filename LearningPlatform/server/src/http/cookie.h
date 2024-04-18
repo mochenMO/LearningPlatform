@@ -35,7 +35,7 @@ private:
 	std::string m_domain;                            // Domain = abc.com         指定Cookie可以发送到哪个域名。默认为设置Cookie的页面所在的域名。
 	std::string m_path;                              // Path = /login            指定了Cookie的路径，表示该Cookie应用于哪些路径。默认为设置为接收该Cookie的页面的路径。Path=/ 表示所有页面
 	std::string m_secure;                            // Secure                   安全标志，表示该Cookie只有在通过HTTPS协议发送时才会被发送到服务器
-	std::string m_HttpOnly;                          // HttpOnly                 表示该Cookie仅能通过HTTP或HTTPS协议发送给服务器，而不能通过客户端脚本即JS代码访问。
+	std::string m_httpOnly;                          // HttpOnly                 表示该Cookie仅能通过HTTP或HTTPS协议发送给服务器，而不能通过客户端脚本即JS代码访问。
 	std::string m_sameSite;                          // SameSite=None            指定了Cookie的跨站点行为，用于防止CSRF（跨站请求伪造）攻击。可以设置为Strict、Lax或None。Strict表示完全禁止第三方Cookie；Lax表示仅在顶级导航时发送Cookie；None表示总是发送Cookie，即使是跨站请求也发送。跨站请求伪造就是伪造一个假网站，你操作假网站，假网站在操作真网站     
 public:
 	Cookie() = default;

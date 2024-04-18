@@ -170,6 +170,9 @@
     <None Include="web\static\html\default.html" />
     <None Include="web\static\html\login.html" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="server\logs\json.log" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

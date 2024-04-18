@@ -150,3 +150,11 @@ void HttpServerResqonse::addCookie(std::vector<mochen::http::Cookie>& _cookies)
 		}
 	}
 }
+
+
+void HttpServerResqonse::redirect(const std::string& _urlPath)
+{
+	m_statusCode = "302";
+	m_statusDescription = "Found";
+	m_parameters["Location"] = _urlPath;
+}

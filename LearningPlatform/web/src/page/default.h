@@ -33,22 +33,20 @@ inline void defaultPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 			userData = _httpServerRequest.getSession()->getParamter<UserData>("userData");
 			if (userData.find(sessionID) != userData.end()) {
 				if (userData[sessionID] == true) {
-					_httpServerResqonse.getFilename() = route->getDefaultStaticFilePath() + "/html/default.html";
+					// _httpServerResqonse.getFilename() = route->getDefaultStaticFilePath() + "/html/default.html";
+					_httpServerResqonse.redirect("/test");
 					return;
 				}
 			}
 		}
 	}
-	_httpServerResqonse.getFilename() = route->getDefaultStaticFilePath() + "/html/login.html";
-	
-	//_httpServerResqonse.getStatusCode() = "302";
-	//_httpServerResqonse.getStatusDescription() = "Found";
-	//_httpServerResqonse.setParamter("Location", "http:://127.0.0.1:8888/login");
+	// _httpServerResqonse.getFilename() = route->getDefaultStaticFilePath() + "/html/login.html";
+	_httpServerResqonse.redirect("/login");
 
 	// 实现转发。注意 Session 是多线程不安全的，使用时需加锁。(目前用的是异步，不需要加锁)
 	// route::Route* route = _httpServerRequest.getSession()->getParamter<route::Route*>("Route");    
 	// route->getFunction("/login")(_httpServerRequest, _httpServerResqonse);                         // 但有一个问题 getFunction 不会检测值是否存在
-
+	
 }
 
 
