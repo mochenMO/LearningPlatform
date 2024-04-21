@@ -5,6 +5,7 @@
 
 #include "../src/page/default.h"
 #include "../src/page/login.h"
+#include "../src/page/home.h"
 
 namespace mochen
 {
@@ -23,21 +24,22 @@ inline route::Route* createRoute()
 	route.getDefaultStaticFilePath() = "web/static";
 	
 	// 设置静态路由
+	// route.setStaticFile("/test", "/html/default.html");       ////////////// 
 	route.setStaticFile("/favicon.ico", "/img/favicon.ico");  // 注意文件路径开头有"/"
-	route.setStaticFile("/test", "/html/default.html");       ////////////// 
+	route.setStaticFile("/main", "/html/main.html");
 
 
 
 	//route.setStaticFile("/", "/html/login.html");
 	route.setStaticFile("/login", "/html/login.html");
 	// route.setRoute("/default", &defaultPageMainFuntion); //////////////
-
+	
 	// 设置动态路由
 	route.setRoute("/", &defaultPageMainFuntion);      // defaultPageMainFuntion 实现"/"重定向到主页面，从而实现自动登录，注意其不会阻止用户强行跳转到登录页面
 	// route.setRoute("/login", &defaultPageMainFuntion);   
 
 	route.setRoute("/login/src", &loginPageMainFuntion);
-
+	route.setRoute("/main/src", &mainPageMainFuntion);
 
 
 	return &route;

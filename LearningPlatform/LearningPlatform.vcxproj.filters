@@ -57,6 +57,9 @@
     <ClCompile Include="server\src\http\cookie.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="web\src\page\home.h">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="server\src\log\log.h">
@@ -98,6 +101,9 @@
     <ClInclude Include="server\src\http\cookie.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="web\src\data\data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="server\config\websever,json" />
@@ -108,8 +114,41 @@
     <None Include="web\static\html\login.html" />
     <None Include="web\static\js\config.js" />
     <None Include="README.md" />
+    <None Include="web\static\html\main.html" />
+    <None Include="web\static\js\default.js" />
+    <None Include="web\static\js\login.js" />
+    <None Include="web\static\js\main.js" />
+    <None Include="web\static\css\default.css" />
+    <None Include="web\static\css\login.css" />
+    <None Include="web\static\css\main.css" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="server\logs\json.log" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="web\static\img\background_login.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="web\static\img\background_main.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="web\static\img\btn_top.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="web\static\img\favicon.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="web\static\img\link01.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="web\static\img\link02.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="web\static\img\link03.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="web\static\img\link04.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

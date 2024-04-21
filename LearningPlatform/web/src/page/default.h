@@ -4,6 +4,7 @@
 
 
 #include "../../../server/src/route/route.h"
+#include "../data/data.h"
 
 #include <iostream>
 
@@ -15,7 +16,6 @@ namespace page
 {
 
 
-using UserData = std::map<std::string, bool>;
 
 
 inline void defaultPageMainFuntion(httpserver::HttpServerRequest& _httpServerRequest, httpserver::HttpServerResqonse& _httpServerResqonse)
@@ -23,18 +23,16 @@ inline void defaultPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 	std::cout << "defaultPageMainFuntion is OK ============================================" << std::endl;
 
 
-	route::Route* route = _httpServerRequest.getSession()->getParamter<route::Route*>("Route");
-	std::string sessionID{};
-	UserData userData{};
+	
+	std::string sessionID;
 
 	if (_httpServerRequest.isFindParamter("Cookie") == true) {
 		sessionID = _httpServerRequest.getCookie()["sessionID"];
-		if (_httpServerRequest.getSession()->isFind("userData") == true) {
-			userData = _httpServerRequest.getSession()->getParamter<UserData>("userData");
-			if (userData.find(sessionID) != userData.end()) {
-				if (userData[sessionID] == true) {
-					// _httpServerResqonse.getFilename() = route->getDefaultStaticFilePath() + "/html/default.html";
-					_httpServerResqonse.redirect("/test");
+		if (_httpServerRequest.getSession()->isFind("userMap") == true) {
+			webdata::UserMap userMap = _httpServerRequest.getSession()->getParamter<webdata::UserMap>("userMap");
+			if (userMap.find(sessionID) != userMap.end()) {
+				if (userMap[sessionID].m_isLogin == true) {
+					_httpServerResqonse.redirect("/main");
 					return;
 				}
 			}

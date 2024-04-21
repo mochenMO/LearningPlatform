@@ -23,7 +23,7 @@ $(document).ready(function() {
   
       // 发送POST请求
       $.ajax({
-        url: 'http://127.123.123.1:8888/login/src',
+        url: urlPath + '/login/src',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
@@ -32,7 +32,7 @@ $(document).ready(function() {
             console.log(response);
 
             if (response.islogin === "true") {   // {"islogin": "true"} 注意响应报文中的Content-Type也要设置为json
-                window.location.replace(urlPath + "/test");
+                window.location.replace(urlPath + "/main");
             } else {
                 alert('账号或密码错误');
             }

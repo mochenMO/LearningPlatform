@@ -4,6 +4,8 @@
 
 
 #include "../../../server/src/route/route.h"
+#include "../data/data.h"
+
 
 #include <iostream>
 
@@ -14,8 +16,6 @@ namespace mochen
 namespace page
 {
 
-
-using UserData = std::map<std::string, bool>;
 
 
 inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerRequest, httpserver::HttpServerResqonse& _httpServerResqonse)
@@ -38,17 +38,33 @@ inline void loginPageMainFuntion(httpserver::HttpServerRequest& _httpServerReque
 
 	// 判断是否登录成功
 	if (data.empty() == false && data[0]["upassword"] == js["upassword"].asString()) {
-		UserData userData;
-		if (_httpServerRequest.getSession()->isFind("userData") == false) {   // 判断有没有创建 userSession
-			_httpServerRequest.getSession()->setParamter<UserData>("userData", userData);
+		webdata::UserMap userMap;
+		if (_httpServerRequest.getSession()->isFind("userMap") == false) {   // 判断有没有创建 userSession
+			_httpServerRequest.getSession()->setParamter<webdata::UserMap>("userMap", userMap);
 		}
-		_httpServerRequest.getSession()->getParamter<UserData>("userData")[data[0]["uid"]] = true;   // 开启自动登录
+		webdata::UserData userData{};
+		userData.m_uid = data[0]["uid"];
+		userData.m_utype = data[0]["utype"];
+		userData.m_uaccount = data[0]["uaccount"];
+		userData.m_upassword = data[0]["upassword"];
+		if (data[0]["uphone"] != "") {
+			userData.m_uphone = data[0]["uphone"];
+		}
+		if (data[0]["uemail"] != "") {
+			userData.m_uemail = data[0]["uemail"];
+		}
+		if (data[0]["uage"] != "") {
+			userData.m_uage = data[0]["uage"];
+		}
+		userData.m_isLogin = true;   // 开启自动登录
+
+		_httpServerRequest.getSession()->getParamter<webdata::UserMap>("userMap")[data[0]["uid"]] = userData; 
 
 		// 设置 Cookie
 		http::Cookie cookie;
 		cookie.setParamter("sessionID", data[0]["uid"]); // 这里 sessionID = uid
 		cookie.getMaxAge() = std::to_string(60 * 60 * 24 * 15);                  // 保存时间为15天            
- 		cookie.getPath() = "/";
+		cookie.getPath() = "/";
 		_httpServerResqonse.addCookie(cookie);
 
 		_httpServerResqonse.setData("json", "{\"islogin\":\"true\"}");
