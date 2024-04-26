@@ -78,10 +78,28 @@ inline void blogPageMainFuntion(httpserver::HttpServerRequest& _httpServerReques
 		// _httpServerResqonse.setData("json", temp);
 
 	}
+	else if (httpUrl.isFindParamter("search") == true) {    // ÇëÇó×ÊÔ´
+		std::stringstream commend{};
+		commend << "select * from blog_tb where btitle like '%";
+		commend << httpUrl.getParamter("tag");
+		commend << "%'";
 
-	
+		sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
+		sqlServer->openDataBase("LEARNING");
+		sql::SQLServer::SQLData data = sqlServer->select(commend.str());
 
 
+		std::string temp = toJson(data).toString();
+
+		printf("%s", temp.c_str());
+
+		_httpServerResqonse.setParamter("Content-Type", "application/json; charset=utf-8");
+		_httpServerResqonse.getData() = temp;
+
+		// select* from blog_tb where btitle like '%algor%'
+
+
+	}
 	
 }
 

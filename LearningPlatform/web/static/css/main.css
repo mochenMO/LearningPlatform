@@ -9,7 +9,7 @@
 body {
     display: flex;
     width: 100%;
-    height: 2000px;
+    height: 1300px;
     border: 1px solid green;   /* 注意：这会出现网站页面底部的横向滚动条 */
     background: url("../img/background_main.jpg") no-repeat; /*no-repeat设置图片只出现一次*/
     background-size: cover; /*根据容器的大小进行缩放，以确保整个容器都被图片覆盖。如果容器的宽高比与背景图片的宽高比不同，那么图片可能会被裁剪以适应容器的大小。*/
@@ -246,7 +246,7 @@ body {
 .content-box {
     display: flex;
     width: 80%;
-    height: 240px;
+    height: 140px;
     border: 1px solid red;
     /* ///// */
     border-radius: 15px;
@@ -258,28 +258,33 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 65%;
+    /* width: 65%;*/
+    width: 100%;
     height: 100%;
-    border: 1px solid red;    
+    border: 1px solid red;
     /* ///// */
     border-radius: 15px;
 }
 
 .title-box {
     font-size: 24px;
-    width: 60vh;
+   /* width: 60vh;*/
+    width: 100vh;
     height: 50px;
     border: 1px solid red;
     border-radius: 15px;
     margin-top: 15px;
+
 }
 
 .synopsis-box {
     font-size: 18px;
-    width: 60vh;
+    /* width: 60vh;*/
+    width: 100vh;
     height: 15vh;
     border: 1px solid red;
     border-radius: 15px;
+    margin-top: 10px;
 }
 
 .paperimg-box {

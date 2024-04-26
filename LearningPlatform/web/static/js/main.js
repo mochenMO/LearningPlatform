@@ -1,6 +1,6 @@
 var currentPage = 1; // 当前页码
 var pageSize = 10; // 每页显示的记录数
-
+var isLastPage = false;
 
 let userData;
 
@@ -168,7 +168,8 @@ function showLeftBox02() {
     });
 
     document.querySelector('.btn1-box').addEventListener('click', function () {
-        console.log("showLeftBox02 btn1_boxbtn1_box ok");
+        // console.log("showLeftBox02 btn1_boxbtn1_box ok");
+        window.open(urlPath + '/cv', '_blank');
     });
 
 
@@ -242,25 +243,61 @@ function topButtonEvent() {
 
 
 
-
-
+// ========================================================================================================================================================
 
 
 
 
 // 搜索功能
 function searchBlog() {
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('GET', 'http://127.0.0.1:8888/users?page=' + currentPage + '&size=' + pageSize, true);
-    // xhr.onreadystatechange = function() {
-    //     if(xhr.readyState == 4 && xhr.status == 200) {
-    //         var users = JSON.parse(xhr.responseText);
-    //         displayUserTable(users);
-    //     }
-    // };
-    // xhr.send();
+
+    var clearBtn = document.getElementById('clearBtn');
+
+    // 添加点击事件监听器
+    clearBtn.addEventListener('click', function () {
+        // 获取输入框元素
+        var searchInput = document.getElementById('searchInput');
+        // 清空输入框内容
+        searchInput.value = '';
+        // 加载数据
+        currentPage = 1;
+        loadBlogData()
+    });
+
+
+    var searchBtn = document.getElementById('searchBtn');
+
+    // 添加点击事件监听器
+    searchBtn.addEventListener('click', function () {
+        // 获取输入框元素
+        var searchInput = document.getElementById('searchInput');
+        // 获取输入框内容
+        var searchText = searchInput.value;
+        // 发送搜索请求
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', urlPath + '/blog/src?search=blogData&tag=' + searchText, true);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+
+                console.log(xhr.responseText); ///////////////
+
+                var data = JSON.parse(xhr.responseText);
+
+                // var utf8Data = convertJSONToUTF8(data);
+                // console.log(utf8Data); ///////////////
+
+                console.log(data); ///////////////
+
+                displayBlogTable(data);
+            }
+        };
+        xhr.send();
+    });
 
 }
+searchBlog(); ////////////////////////////////////////////////////
+
 
 function convertToUTF8(str) {
     var decoder = new TextDecoder('ASCII');
@@ -295,9 +332,6 @@ function loadBlogData() {
 
             console.log(xhr.responseText); ///////////////
 
-
-            
-
             var data = JSON.parse(xhr.responseText);
 
             // var utf8Data = convertJSONToUTF8(data);
@@ -317,7 +351,16 @@ function loadBlogData() {
 
 function displayBlogTable(data) {
 
-    for (let i = 0; i < data.length; i++) {
+    if (data.length < pageSize) {
+        isLastPage = true;
+    } else {
+        isLastPage = false;
+    }
+
+    document.getElementById('blogListContainer').textContent = "";
+
+    for (let i = 0; i < data.length; i++)
+    {
         const newDiv = document.createElement('div');
         newDiv.className = 'content-box';
         const paperBox = document.createElement('div');
@@ -332,16 +375,16 @@ function displayBlogTable(data) {
         // synopsisBox.textContent = `本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。`;
         synopsisBox.textContent = data[i]["bintroduce"];
 
-        const imageBox = document.createElement('div');
-        imageBox.className = 'paperimg-box';
+        // const imageBox = document.createElement('div');
+        // imageBox.className = 'paperimg-box';
 
-        // paperBox.appendChild(titleBox);
-        // paperBox.appendChild(synopsisBox);
-        // newDiv.appendChild(paperBox);
+        paperBox.appendChild(titleBox);
+        paperBox.appendChild(synopsisBox);
+        newDiv.appendChild(paperBox);
         // newDiv.appendChild(imageBox); // 将imageBox添加到结构中
 
 
-        if (i % 2 == 0) {
+/*        if (i % 2 == 0) {
             paperBox.appendChild(titleBox);
             paperBox.appendChild(synopsisBox);
             newDiv.appendChild(paperBox);
@@ -353,7 +396,7 @@ function displayBlogTable(data) {
             paperBox.appendChild(synopsisBox);
             newDiv.appendChild(paperBox);
 
-        }
+        }*/
 
         // 添加点击事件
         newDiv.addEventListener('click', () => {
@@ -362,10 +405,31 @@ function displayBlogTable(data) {
 
         document.getElementById('blogListContainer').appendChild(newDiv);
     }
+
 }
 
 
+// 上一页
+function prevPage()
+{
+    console.log("prevPage"); ///////////
+    if (currentPage > 1) {
+        currentPage--;
+        document.getElementById("pageNumber").textContent = currentPage;
+        loadBlogData();
+    }
+}
 
+// 下一页
+function nextPage()
+{
+    console.log("nextPage");//////////////
+    if (isLastPage == false) {
+        currentPage++;
+        document.getElementById("pageNumber").textContent = currentPage;
+        loadBlogData();
+    }
+}
 
 
 showLeftBox02();
