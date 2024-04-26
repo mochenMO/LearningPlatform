@@ -8,5 +8,6 @@
   "bmp": "image/bmp",
   "ico": "image/x-icon",
   "json": "application/json",
-  "ttf": "application/x-font-ttf"
+  "ttf": "application/x-font-ttf",
+  "txt": "text/plain"
 }

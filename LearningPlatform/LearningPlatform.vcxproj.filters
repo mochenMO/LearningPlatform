@@ -104,6 +104,9 @@
     <ClInclude Include="web\src\data\data.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="web\src\page\blog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="server\config\websever,json" />
@@ -121,6 +124,13 @@
     <None Include="web\static\css\default.css" />
     <None Include="web\static\css\login.css" />
     <None Include="web\static\css\main.css" />
+    <None Include="web\static\blog\1.html" />
+    <None Include="web\static\blog\2.html" />
+    <None Include="web\static\blog\3.html" />
+    <None Include="web\static\blog\4.html" />
+    <None Include="web\static\blog\5.html" />
+    <None Include="web\static\blog\6.html" />
+    <None Include="web\static\blog\7.html" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="server\logs\json.log" />

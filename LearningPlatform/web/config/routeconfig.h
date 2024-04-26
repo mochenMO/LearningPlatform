@@ -6,6 +6,7 @@
 #include "../src/page/default.h"
 #include "../src/page/login.h"
 #include "../src/page/home.h"
+#include "../src/page/blog.h"
 
 namespace mochen
 {
@@ -40,6 +41,7 @@ inline route::Route* createRoute()
 
 	route.setRoute("/login/src", &loginPageMainFuntion);
 	route.setRoute("/main/src", &mainPageMainFuntion);
+	route.setRoute("/blog/src", &blogPageMainFuntion);
 
 
 	return &route;

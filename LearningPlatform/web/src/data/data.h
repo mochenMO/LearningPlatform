@@ -12,10 +12,9 @@ namespace mochen
 namespace webdata
 {
 
-	
-
-struct UserData
+class UserData
 {
+public:
 	std::string m_uid;
 	std::string m_utype;
 	std::string m_uaccount;
@@ -24,9 +23,8 @@ struct UserData
 	std::string m_uemail;
 	std::string m_uage;
 	bool m_isLogin;
-
-	UserData()
-	{
+public:
+	UserData() {
 		m_uid = "null";
 		m_utype = "null";
 		m_uaccount = "null";
@@ -36,6 +34,8 @@ struct UserData
 		m_uage = "null";
 		m_isLogin = false;
 	}
+
+
 };
 
 

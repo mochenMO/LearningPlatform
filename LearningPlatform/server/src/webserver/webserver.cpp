@@ -247,13 +247,16 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 
 
 	// 短链接
-	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::terminated);  // 设置为终止状态
 	_acceptSocket.clear();
+	InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::terminated);  // 设置为终止状态
+
 
 	// 长连接
-	// InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::working);  // 设置为等待状态 
 	// time::Timer timer{};
 	// InterlockedExchange64(&_acceptSocket.getWaitingTime(), timer.getCount());                   // 重新设置起始时间
+	// shutdown(_acceptSocket.getSocketFd(), SD_SEND);
+	// InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::waiting);  // 设置为等待状态 
+
 }
 
 

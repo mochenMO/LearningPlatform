@@ -2,145 +2,113 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>主页面</title>
-  <link rel="stylesheet" href="../css/main.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>主页面</title>
+    <link rel="stylesheet" href="../css/main.css" />
 </head>
 
 <body>
 
-  
-  <template class="template-user-box">
-    <div class="user-box">
-      <button class="headshot-box"></button>
-      <div class="username-box">null</div>
 
-      <div class="link-main-box">
-        <button title="github" onclick="window.open('https://github.com/')"></button>
-        <button title="csdn" onclick="window.open('https://www.csdn.net/')"></button>
-        <button title="chatGPT" onclick="window.open('https://chat18.aichatos.xyz/#/chat/1712818675420')"></button>
-        <button title="知乎" onclick="window.open('https://www.zhihu.com/')"></button>
-      </div>
-    </div>
+    <template class="template-user-box">
+        <div class="user-box">
+            <button class="headshot-box"></button>
+            <div class="username-box">null</div>
 
-    <div class="tool-box">
-      <button class="btn1-box">图像处理器</button>
-    </div>
-  </template>
+            <div class="link-main-box">
+                <button title="github" onclick="window.open('https://github.com/')"></button>
+                <button title="csdn" onclick="window.open('https://www.csdn.net/')"></button>
+                <button title="chatGPT" onclick="window.open('https://chat18.aichatos.xyz/#/chat/1712818675420')"></button>
+                <button title="知乎" onclick="window.open('https://www.zhihu.com/')"></button>
+            </div>
+        </div>
 
-  <template class="template-user-info-box">
-    <div class="user-info-box">
-      <button class="headshot-box"></button>
-  
-      <div class="username-input-box">
-        <input title="账号" type="text" placeholder="null"/>
-      </div>
-      <div class="username-input-box">
-        <input title="密码" type="text" placeholder="null"/>
-      </div>
-      <div class="username-input-box">
-        <input title="手机号" type="text" placeholder="null"/>
-      </div>
-      <div class="username-input-box">
-        <input title="电子邮箱" type="text"  placeholder="null"/>
-      </div>
-      <div class="username-input-box">
-        <input title="年龄" type="text"  placeholder="null"/>
-      </div>
-    </div>
-    <div class="tool-box">
-      <button class="btn1-box">确认修改</button>
-    </div>
-    <div class="tool-box">
-      <button class="btn2-box">退出登录</button>
-    </div>
-    <div class="tool-box">
-      <button class="btn3-box">返回</button>
-    </div>
-  </template>
+        <div class="tool-box">
+            <button class="btn1-box">图像处理器</button>
+        </div>
+    </template>
 
+    <template class="template-user-info-box">
+        <div class="user-info-box">
+            <button class="headshot-box"></button>
 
-  <div class="left-box">
-   
-
-  </div>
+            <div class="username-input-box">
+                <input title="账号" type="text" placeholder="null" />
+            </div>
+            <div class="username-input-box">
+                <input title="密码" type="text" placeholder="null" />
+            </div>
+            <div class="username-input-box">
+                <input title="手机号" type="text" placeholder="null" />
+            </div>
+            <div class="username-input-box">
+                <input title="电子邮箱" type="text" placeholder="null" />
+            </div>
+            <div class="username-input-box">
+                <input title="年龄" type="text" placeholder="null" />
+            </div>
+        </div>
+        <div class="tool-box">
+            <button class="btn1-box">确认修改</button>
+        </div>
+        <div class="tool-box">
+            <button class="btn2-box">退出登录</button>
+        </div>
+        <div class="tool-box">
+            <button class="btn3-box">返回</button>
+        </div>
+    </template>
 
 
-  <div class="right-box">
-    <div class="search-box">
-      <button>返回</button>
-      <input type="text" />
-      <button>搜索</button>
-    </div>
+    <div class="left-box">
 
-    <div class="top-box">
-      <button title="返回顶部"></button>
-    </div>
 
-    <div class="content-box">
-      <div class="paperimg-box"></div>
-      <div class="paper-box">
-        <div class="title-box">C语言实现BP神经网络</div>
-        <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
-      </div>
     </div>
 
 
-    <div class="content-box">
-      <div class="paper-box">
-        <div class="title-box">C语言实现BP神经网络</div>
-        <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
-      </div><div class="paperimg-box"></div>
+    <div class="right-box">
+        <div class="search-box">
+            <button>返回</button>
+            <input type="text" />
+            <button>搜索</button>
+        </div>
+
+        <div class="top-box">
+            <button title="返回顶部"></button>
+        </div>
+
+
+
+        <!-- <div class="content-box">
+          <div class="paperimg-box"></div>
+          <div class="paper-box">
+            <div class="title-box">C语言实现BP神经网络</div>
+            <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
+          </div>
+        </div>
+
+        <div class="content-box">
+          <div class="paper-box">
+            <div class="title-box">C语言实现BP神经网络</div>
+            <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
+          </div>
+          <div class="paperimg-box"></div>
+        </div> -->
+
+        <div id="blogListContainer"></div>
+
+        <div class="pagination-container">
+            <button onclick="prevPage()">上一页</button>
+            <span id="pageNumber">1</span>
+            <button onclick="nextPage()">下一页</button>
+        </div>
+
+
+
     </div>
-
-    <div class="content-box">
-      <div class="paperimg-box"></div>
-      <div class="paper-box">
-        <div class="title-box">C语言实现BP神经网络</div>
-        <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
-      </div>
-    </div>
-
-
-    <div class="content-box">
-      <div class="paper-box">
-        <div class="title-box">C语言实现BP神经网络</div>
-        <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
-      </div><div class="paperimg-box"></div>
-    </div>
-
-    <div class="content-box">
-      <div class="paperimg-box"></div>
-      <div class="paper-box">
-        <div class="title-box">C语言实现BP神经网络</div>
-        <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
-      </div>
-    </div>
-
-
-    <div class="content-box">
-      <div class="paper-box">
-        <div class="title-box">C语言实现BP神经网络</div>
-        <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
-      </div><div class="paperimg-box"></div>
-    </div>
-
-    <div class="content-box">
-      <div class="paperimg-box"></div>
-      <div class="paper-box">
-        <div class="title-box">C语言实现BP神经网络</div>
-        <div class="synopsis-box">本文简要记录了作者在实现BP神经网络过程，学到的各种知识。注意只是简单记录一下用到的知识点，内容以公式和结论为主。</div>
-      </div>
-    </div>
-
-
-
-
-
-  </div>
-  <script src="../js/config.js"></script>
-  <script src="../js/main.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
 </body>
 </html>
 

@@ -51,8 +51,8 @@ public:
 class HttpServerResqonse : public http::HttpResponse
 {
 private:
-	std::string m_filename;
-	json::Json* m_mineTypeConfig;
+	std::string  m_filename;
+	json::Json  *m_mineTypeConfig;
 public:
 	HttpServerResqonse();
 	~HttpServerResqonse() = default;

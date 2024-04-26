@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _MOCHEN_MAIN_PAGE_H_    // 注意改预处理名！！！！！
-#define _MOCHEN_MAIN_PAGE_H_
+#ifndef _MOCHEN_HOME_PAGE_H_    // 注意改预处理名！！！！！
+#define _MOCHEN_HOME_PAGE_H_
 
 
 #include "../../../server/src/route/route.h"
@@ -80,4 +80,4 @@ anchors01:
 };
 
 
-#endif // !_MOCHEN_MAIN_PAGE_H_
+#endif // !_MOCHEN_HOME_PAGE_H_

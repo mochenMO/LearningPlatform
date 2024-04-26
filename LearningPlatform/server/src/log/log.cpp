@@ -483,7 +483,7 @@ void Logger::log(LogLevel _level, const char* _filename, int _line, const char* 
 	va_list args;
 	va_start(args, _format);
 	int size = vsnprintf(nullptr, 0, _format, args);
-	char* buffer = (char*)malloc(sizeof(char) * (size + 1));    // +1保存结尾的"\0"
+	char* buffer = (char*)malloc(sizeof(char) * (size + 1));    // +1保存结尾的"\0"。注意这里不用calloc因为_format自带"\0"
 	vsprintf(buffer, _format, args);
 	va_end(args);
 
