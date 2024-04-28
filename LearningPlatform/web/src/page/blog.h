@@ -36,21 +36,7 @@ inline json::Json toJson(sql::SQLServer::SQLData& _data)
 inline void blogPageMainFuntion(httpserver::HttpServerRequest& _httpServerRequest, httpserver::HttpServerResqonse& _httpServerResqonse)
 {
 	http::HttpURL httpUrl = _httpServerRequest.getUrl();
-	// std::string sessionID;
-	// webdata::UserMap userMap;
 
-//	if (_httpServerRequest.isFindParamter("Cookie") == true) {
-//		sessionID = _httpServerRequest.getCookie()["sessionID"];
-//		if (_httpServerRequest.getSession()->isFind("userMap") == true) {
-//			userMap = _httpServerRequest.getSession()->getParamter<webdata::UserMap>("userMap");
-//			if (userMap.find(sessionID) != userMap.end()) {
-//				goto anchors01;
-//			}
-//		}
-//	}
-//	return;
-//
-//anchors01:
 	if (httpUrl.isFindParamter("get") == true) {    // ÇëÇó×ÊÔ´
 
 		int page = atoi(httpUrl.getParamter("page").c_str());
@@ -62,7 +48,7 @@ inline void blogPageMainFuntion(httpserver::HttpServerRequest& _httpServerReques
 		commend << n;
 		commend << " rows fetch next ";
 		commend << size;
-		commend << " rows only";
+		commend << " rows only;";
 
 		sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
 		sqlServer->openDataBase("LEARNING");
@@ -82,7 +68,7 @@ inline void blogPageMainFuntion(httpserver::HttpServerRequest& _httpServerReques
 		std::stringstream commend{};
 		commend << "select * from blog_tb where btitle like '%";
 		commend << httpUrl.getParamter("tag");
-		commend << "%'";
+		commend << "%';";
 
 		sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
 		sqlServer->openDataBase("LEARNING");
@@ -110,3 +96,4 @@ inline void blogPageMainFuntion(httpserver::HttpServerRequest& _httpServerReques
 
 
 #endif // !_MOCHEN_BLOG_PAGE_H_
+

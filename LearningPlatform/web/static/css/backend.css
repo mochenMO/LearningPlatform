@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background-color: #f2f2f2;
+    width: 200px;
+    padding: 20px;
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.menu li:hover {
+    background-color: #e0e0e0;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.form-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+
+/* ===================================================================================================================================== */
+.modal {
+    display: none;
+   position: fixed;
+   z-index: 1000;
+   left: 25%;
+   top: 1%; 
+   width: 50%;
+   height: 50%;
+    /* overflow: auto;  */
+   /* background-color: rgba(0,0,0,0.4); */
+   padding-top: 60px; 
+ }
+ 
+ .modal-content {
+   background-color: #fefefe;
+   margin: 5% auto;
+   padding: 20px;
+   border: 1px solid #888;
+   width: 80%;
+ }
+ 
+ .close {
+   color: #aaa;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+ }
+ 
+ .close:hover,
+ .close:focus {
+   color: black;
+   text-decoration: none;
+   cursor: pointer;
+ }
+ 
+ /* 弹性布局 */
+ .modal-content form {
+   display: flex;
+   flex-direction: column;
+ }
+ 
+ .modal-content form label {
+   margin-bottom: 5px;
+ }
+ 
+ .modal-content form input {
+   /* margin-bottom: 5px; */
+   padding: 5px;
+ }
+ 
+
+ .btn-box{
+   display: flex;
+   justify-content: center;
+ }
+
+ .modal-content form button {
+   margin-top: 10px;
+   padding: 5px 10px;
+   width: 25%; /* 设置按钮宽度 */
+ }
+ 
+ .modal-content form button:first-child {
+   margin-right: 10px; /* 设置按钮之间的间距 */
+ }
+

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理页面</title>
+    <link rel="stylesheet" href="../css/backend.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <ul class="menu">
+                <li id="userMenu">用户信息</li>
+                <li id="blogMenu">博客信息</li>
+            </ul>
+        </div>
+        <div class="content">
+            <div id="userContent" class="form-container">
+                <!-- 用户信息表单 -->
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="搜索...">
+                    <button onclick="searchData()">搜索</button>
+                    <button onclick="addData()">添加</button>
+                </div>
+
+                <div id="tableContainer"></div>
+
+                <div class="pagination-container">
+                    <button onclick="prevPage()">上一页</button>
+                    <span id="pageNumber">1</span>
+                    <button onclick="nextPage()">下一页</button>
+                </div>
+
+
+            </div>
+            <div id="blogContent" class="form-container" style="display: none;">
+                <!-- 博客信息表单 -->
+            </div>
+        </div>
+    </div>
+<!-- 
+    <div id="editUserForm" style="display: none;">
+        <h2>编辑用户信息</h2>
+        <form id="editUserForm">
+            <input type="hidden" id="editUserId" name="id">
+            <label for="editUsername">用户名:</label>
+            <input type="text" id="editUsername" name="username">
+            <label for="editPassword">密码:</label>
+            <input type="password" id="editPassword" name="password">
+            <label for="editPhone">手机号:</label>
+            <input type="text" id="editPhone" name="phone">
+            <label for="editEmail">邮箱:</label>
+            <input type="email" id="editEmail" name="email">
+            <button type="button" onclick="updateUser()">更新</button>
+            <button type="button" onclick="cancelEdit()">取消</button>
+        </form>
+    </div> -->
+
+
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>修改用户信息</h2>
+          <form id="userInfoForm">
+            <label for="uid">用户ID:</label>
+            <input type="text" id="uid" name="uid" readonly><br>
+            <label for="utype">用户类型:</label>
+            <input type="text" id="utype" name="utype"><br>
+            <label for="uaccount">账号:</label>
+            <input type="text" id="uaccount" name="uaccount"><br>
+            <label for="upassword">密码:</label>
+            <input type="text" id="upassword" name="upassword"><br>
+            <label for="uphone">电话:</label>
+            <input type="text" id="uphone" name="uphone"><br>
+            <label for="uemail">邮箱:</label>
+            <input type="email" id="uemail" name="uemail"><br>
+            <label for="uage">年龄:</label>
+            <input type="text" id="uage" name="uage"><br>
+      
+            <div class="btn-box">
+              <button type="submit" id="confirmBtn">确认</button>
+              <button type="button" id="cancelBtn">取消</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+
+
+    <script src="../js/config.js"></script>
+    <script src="../js/backend.js"></script>
+</body>
+</html>
+
+

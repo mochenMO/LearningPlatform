@@ -145,6 +145,7 @@
     <ClCompile Include="web\src\page\home.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C:\Users\Administrator\Desktop\Server01-0.6-2023-6-1\Server01\imgAlg\DealImage02.h" />
     <ClInclude Include="server\src\httpserver\httpserver.h" />
     <ClInclude Include="server\src\http\cookie.h" />
     <ClInclude Include="server\src\http\http.h" />
@@ -157,8 +158,11 @@
     <ClInclude Include="server\src\time\time.h" />
     <ClInclude Include="server\src\webserver\webserver.h" />
     <ClInclude Include="web\config\routeconfig.h" />
+    <ClInclude Include="web\src\cv\imgalg.h" />
     <ClInclude Include="web\src\data\data.h" />
+    <ClInclude Include="web\src\page\backend.h" />
     <ClInclude Include="web\src\page\blog.h" />
+    <ClInclude Include="web\src\page\cv.h" />
     <ClInclude Include="web\src\page\default.h" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +182,8 @@
     <None Include="web\static\css\default.css" />
     <None Include="web\static\css\login.css" />
     <None Include="web\static\css\main.css" />
+    <None Include="web\static\html\backend.html" />
+    <None Include="web\static\html\cv.html" />
     <None Include="web\static\html\main.html" />
     <None Include="web\static\js\config.js" />
     <None Include="web\static\default.html" />

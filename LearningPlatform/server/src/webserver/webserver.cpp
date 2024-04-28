@@ -154,27 +154,48 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	int len = _value.size();
 	char buffer[4096] = { 0 };
 
+	//if (len == (int)sizeof(buffer)) {    // 等于缓冲区的大小，说明还有数据，则循环接收
+	//	while (1) {
+	//		int len = _acceptSocket.recv(buffer, 4094);
+	//		if (len > 0) {
+	//			_value.append(buffer, len);
+	//		}
+	//		else if (len == 0                                                     // len=0 表示客户端已关闭连接
+	//			|| (len == SOCKET_ERROR && WSAGetLastError() != WSAEWOULDBLOCK))  // 不是非阻塞模式下的错误
+	//		{
+	//			printf("recv()错误！！！\n");  // error.log访问日志记录 #$@#!$!@###########!@$#$#@!$#!$!@#$#$@#!$!@###########!@$#$#@!$#!$!@#$
+
+	//			InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::terminated);
+	//			_acceptSocket.clear();
+	//			return;
+	//		}
+	//		if (len < (int)sizeof(buffer)) {   // 数据已读取完
+	//			break;
+	//		}
+	//	}
+	//}
+
+
 	if (len == (int)sizeof(buffer)) {    // 等于缓冲区的大小，说明还有数据，则循环接收
 		while (1) {
-			int len = _acceptSocket.recv(buffer, 4094);
-			if (len > 0) {
-				_value.append(buffer, len);
+			int res = _acceptSocket.recv(buffer, sizeof(buffer));
+			if (res == SOCKET_ERROR) {
+				if (WSAGetLastError() == WSAEWOULDBLOCK) {  // 非阻塞套接字的缓冲区满了
+					continue;                               // 重新尝试 recv
+				}
+				else {
+					printf("recv 失败，错误码：%d\n", WSAGetLastError());
+					break;
+				}
 			}
-			else if (len == 0                                                     // len=0 表示客户端已关闭连接
-				|| (len == SOCKET_ERROR && WSAGetLastError() != WSAEWOULDBLOCK))  // 不是非阻塞模式下的错误
-			{
-				printf("recv()错误！！！\n");  // error.log访问日志记录 #$@#!$!@###########!@$#$#@!$#!$!@#$#$@#!$!@###########!@$#$#@!$#!$!@#$
-
-				InterlockedExchange((LONG*)&_acceptSocket.getState(), (LONG)AcceptSocket::State::terminated);
-				_acceptSocket.clear();
-				return;
+			else {
+				_value.append(buffer, res);
 			}
-			if (len < (int)sizeof(buffer)) {   // 数据已读取完
+			if (res < (int)sizeof(buffer)) {   // 数据已读取完
 				break;
 			}
 		}
 	}
-
 
 	std::cout << _value << std::endl;   /////////////////////////////////////////////////////////////////////////
 
@@ -230,15 +251,41 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 	else if (filename != "") {
 		FILE* fp = fopen(filename.c_str(), "rb");   // 注意要以二进制的形式读取文件
 		if (fp != nullptr) {
-			while (1) {
+			//while (1) {
+			//	len = fread(buffer, sizeof(char), sizeof(buffer), fp);
+			//	// len = send(_acceptSocket.getSocketFd(), buffer, len, 0);
+			//	len = _acceptSocket.send(buffer, len);
+			//	if (len < (int)sizeof(buffer)) {
+			//		break;
+			//	}
+			//}
+			//fclose(fp);
+
+			while (!feof(fp)) {
 				len = fread(buffer, sizeof(char), sizeof(buffer), fp);
-				// len = send(_acceptSocket.getSocketFd(), buffer, len, 0);
-				len = _acceptSocket.send(buffer, len);
-				if (len < (int)sizeof(buffer)) {
-					break;
+				if (len > 0) {
+					while (1) {
+						int res = _acceptSocket.send(buffer, len);
+						if (res == SOCKET_ERROR) {    
+							if (WSAGetLastError() == WSAEWOULDBLOCK) {  // 非阻塞套接字的缓冲区满了
+								continue;                               // 重新尝试 send
+							}
+							else {
+								printf("send 失败，错误码：%d\n", WSAGetLastError());
+								break;
+							}
+						}
+						else {
+							break;  // 成功发送数据
+						}
+					}
+				}
+				else if(len != 0){
+					printf("fread 失败\n");
 				}
 			}
-			fclose(fp);
+			fclose(fp);   // 销毁fp
+
 		}
 		else {
 			printf("文件打开失败！logger\n");  // #@!#@!#@!#@!#!@#!@#!@#!@#!@#!@#

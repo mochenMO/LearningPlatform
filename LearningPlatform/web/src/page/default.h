@@ -22,7 +22,7 @@ inline void defaultPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 {
 	std::cout << "defaultPageMainFuntion is OK ============================================" << std::endl;
 
-
+	
 	
 	std::string sessionID;
 

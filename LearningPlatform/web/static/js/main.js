@@ -57,8 +57,8 @@ function showLeftBox01() {
 
 
     document.querySelector('.headshot-box').addEventListener('click', function () {
-        console.log("back22 ok");
-
+        // console.log("back22 ok");
+        window.open(urlPath + '/backend', '_blank');
     });
 
     document.querySelector('.btn1-box').addEventListener('click', function () {
@@ -322,7 +322,7 @@ function convertJSONToUTF8(obj) {
 function loadBlogData() {
 
 
-    console.log("撒大苏打撒啊飒飒现场支持");
+    // console.log("loadBlogData");  
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', urlPath + '/blog/src?get=blogData&page=' + currentPage + '&size=' + pageSize, true);

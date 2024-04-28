@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像处理页面</title>
+    <!-- 导入阿里的图标样式文件 -->
+    <link rel="stylesheet" href="../css/iconfont.css">
+    <link rel="stylesheet" href="../css/cv.css">
+</head>
+<body>
+
+
+    <div class="content">
+        <div class="menu-box">
+            <!-- 展示与隐藏侧边栏 开始-->
+            <input type="checkbox" id="menu-btn">
+            <!-- <label for="menu-btn"><i class="iconfont icon-yemianfanhui"></i></label> -->
+            <!-- 展示与隐藏侧边栏 结束-->
+            <div class="menu">
+                <!-- 侧边栏的标题 开始-->
+                <div class="menu-title">
+                    <h1>Menu</h1>
+                </div>
+                <!-- 侧边栏的标题 结束-->
+
+                <!-- 每一项导航 -->
+                <div class="menu-item">
+                    <input type="checkbox" id="menu-item1">
+                    <label for="menu-item1">
+                        <i class="menu-item-icon iconfont icon-a-04-zixunfabu"></i>
+                        <span>图片的形状变换</span>
+                        <i class="menu-item-last iconfont icon-down"></i>
+                    </label>
+                    <div class="menu-content">
+                        <span id = "btn1_1">缩放<img src="../img/box1.png"/></span>
+                        <span id = "btn1_2">旋转<img src="../img/box1.png"/></span>
+                        <span id = "btn1_3">翻转<img src="../img/box1.png"/></span>
+                    </div>
+                    
+                </div>
+
+                <div class="menu-item">
+                    <input type="checkbox" id="menu-item2">
+                    <label for="menu-item2">
+                        <i class="menu-item-icon iconfont icon-a-04-zixunfabu"></i>
+                        <span>图片的颜色处理</span>
+                        <i class="menu-item-last iconfont icon-down"></i>
+                    </label>
+                    <div class="menu-content">
+                        <span id = "btn2_1">灰度图<img src="../img/box1.png"/></span>
+                        <span id = "btn2_2">二值图<img src="../img/box1.png"/></span>
+                        <span id = "btn2_3">反色<img src="../img/box1.png"/></span>
+                        <span id = "btn2_4">直方图均衡化<img src="../img/box1.png"/></span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <input type="checkbox" id="menu-item3">
+                    <label for="menu-item3">
+                        <i class="menu-item-icon iconfont icon-a-04-zixunfabu"></i>
+                        <span>图像的卷积操作</span>
+                        <i class="menu-item-last iconfont icon-down"></i>
+                    </label>
+                    <div class="menu-content">
+                        <span id = "btn3_1">高斯滤波<img src="../img/box1.png"/></span>
+                        <span id = "btn3_2">Sobel边缘检测<img src="../img/box1.png"/></span>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <input type="checkbox" id="menu-item4">
+                    <label for="menu-item4">
+                        <i class="menu-item-icon iconfont icon-a-04-zixunfabu"></i>
+                        <span>其他算法</span>
+                        <i class="menu-item-last iconfont icon-down"></i>
+                    </label>
+                    <div class="menu-content">
+                        <span id = "btn4_1">MAX池化<img src="../img/box1.png"/></span>
+                        <span id = "btn4_2">自适应边缘检测<img src="../img/box1.png"/></span>
+                        <span id = "btn4_3">二值灰度表达<img src="../img/box1.png"/></span>
+                    </div>
+                </div>
+
+                <!-- ============= -->
+
+
+
+
+
+
+                <!-- ============= -->
+
+
+                <div class="set-line"></div>
+
+                <div class="menu-item">
+                    <label>
+                        <i class="menu-item-icon iconfont icon-a-08-shezhi"></i>
+                        <span>setting</span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="box1">
+            <!-- <img id="run" src="../index/res/run.png" /> -->
+
+            <ul>
+                <li><img id = "btn_run" title="运行" src="../img/run.png"></li>
+                <li><img id = "btn_reset" title="重启" src="../img/reset.png"></li>
+                <li><img id = "btn_exchange" title="交换" src="../img/exchange.png"></li>
+                <li><img id = "btn_add" title="添加" src="../img/add.png"></li>
+                <li><img id = "btn_downLoad" title="下载" src="../img/downLoad.png"></li>
+            </ul>
+        </div>
+
+        <div id="box2">
+            <!-- wrew -->
+            <img src = "../img/testimg1.bmp">
+
+            <!-- <img src = ../img/run.png> -->
+        </div>
+
+        <div id="box3">
+            <div class="menu-title">
+                <h2>Task Queue</h2>
+            </div>
+            
+            <!-- <div>
+                sdfdsf
+            </div> -->
+
+        </div>
+
+    </div>
+
+
+
+    <template id="testbox">
+        <div class = minbox>
+            <p style="float:left">rtrtc</p>
+           <input type="text" />
+        <div>
+    </template>
+
+
+    <script src="../js/config.js"></script>
+    <script src="../js/cv.js"></script>
+</body>
+</html>
+
+

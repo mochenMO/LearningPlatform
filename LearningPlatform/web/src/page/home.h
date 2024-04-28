@@ -64,7 +64,7 @@ anchors01:
 			commend += "uphone='" + js["uphone"].asString() + "',";
 			commend += "uemail='" + js["uemail"].asString() + "',";
 			commend += "uage='" + js["uage"].asString() + "'";
-			commend += "where uid='" + sessionID + "'";   // зЂвт sessionID = uid 
+			commend += "where uid='" + sessionID + "';";   // зЂвт sessionID = uid 
 			 
 			sqlServer->update(commend);
 		}
