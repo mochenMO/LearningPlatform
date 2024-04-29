@@ -110,9 +110,6 @@
     <ClInclude Include="web\src\page\cv.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Administrator\Desktop\Server01-0.6-2023-6-1\Server01\imgAlg\DealImage02.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="web\src\cv\imgalg.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -145,6 +142,7 @@
     <None Include="web\static\blog\7.html" />
     <None Include="web\static\html\cv.html" />
     <None Include="web\static\html\backend.html" />
+    <None Include="web\static\html\error.html" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="server\logs\json.log" />

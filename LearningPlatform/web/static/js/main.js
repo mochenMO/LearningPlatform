@@ -58,7 +58,28 @@ function showLeftBox01() {
 
     document.querySelector('.headshot-box').addEventListener('click', function () {
         // console.log("back22 ok");
-        window.open(urlPath + '/backend', '_blank');
+        // window.open(urlPath + '/backend', '_blank');
+
+        let xhr = new XMLHttpRequest(); 
+        xhr.open('POST', urlPath + '/login/src?action=backend', true); 
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    console.log(response);
+                    if (response.islogin === "true") {
+                       window.open(urlPath + '/backend', '_blank');
+                    } else {
+                        // alert('权限不足');
+                    }
+                } else {
+                    alert('发生错误：' + xhr.statusText);
+                }
+            }
+        };  
+        // 发送请求
+        xhr.send();
+
     });
 
     document.querySelector('.btn1-box').addEventListener('click', function () {

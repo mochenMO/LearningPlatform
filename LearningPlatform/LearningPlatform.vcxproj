@@ -145,7 +145,6 @@
     <ClCompile Include="web\src\page\home.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\Administrator\Desktop\Server01-0.6-2023-6-1\Server01\imgAlg\DealImage02.h" />
     <ClInclude Include="server\src\httpserver\httpserver.h" />
     <ClInclude Include="server\src\http\cookie.h" />
     <ClInclude Include="server\src\http\http.h" />
@@ -184,6 +183,7 @@
     <None Include="web\static\css\main.css" />
     <None Include="web\static\html\backend.html" />
     <None Include="web\static\html\cv.html" />
+    <None Include="web\static\html\error.html" />
     <None Include="web\static\html\main.html" />
     <None Include="web\static\js\config.js" />
     <None Include="web\static\default.html" />

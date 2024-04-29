@@ -237,7 +237,12 @@ void WebServer::dealData_taskFuntion(AcceptSocket& _acceptSocket, std::string _v
 		m_route->getFunction(urlPath)(httpServerRequest, httpServerResqonse);
 		filename = httpServerResqonse.getFilename();
 	}
-	
+	else if (filename == "") {
+		filename += m_route->getDefaultStaticFilePath();
+		filename += m_route->getStaticFile("/error");
+	}
+
+
 	// 开始发送数据
 	std::string httpServerResqonseHeader = httpServerResqonse.headerToString();
 	std::cout << httpServerResqonse.headerToString() << std::endl; ///////////////////////////////////////////////////////////////////////

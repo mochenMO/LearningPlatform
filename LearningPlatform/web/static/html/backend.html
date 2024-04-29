@@ -20,8 +20,8 @@
 
                 <div class="search-container">
                     <input type="text" id="searchInput" placeholder="搜索...">
-                    <button onclick="searchData()">搜索</button>
-                    <button onclick="addData()">添加</button>
+                    <button onclick="searchDataFunction()">搜索</button>
+                    <!-- <button onclick="addData()">添加</button> -->
                 </div>
 
                 <div id="tableContainer"></div>
@@ -39,24 +39,6 @@
             </div>
         </div>
     </div>
-<!-- 
-    <div id="editUserForm" style="display: none;">
-        <h2>编辑用户信息</h2>
-        <form id="editUserForm">
-            <input type="hidden" id="editUserId" name="id">
-            <label for="editUsername">用户名:</label>
-            <input type="text" id="editUsername" name="username">
-            <label for="editPassword">密码:</label>
-            <input type="password" id="editPassword" name="password">
-            <label for="editPhone">手机号:</label>
-            <input type="text" id="editPhone" name="phone">
-            <label for="editEmail">邮箱:</label>
-            <input type="email" id="editEmail" name="email">
-            <button type="button" onclick="updateUser()">更新</button>
-            <button type="button" onclick="cancelEdit()">取消</button>
-        </form>
-    </div> -->
-
 
     <div id="userModal" class="modal">
         <div class="modal-content">
@@ -74,7 +56,7 @@
             <label for="uphone">电话:</label>
             <input type="text" id="uphone" name="uphone"><br>
             <label for="uemail">邮箱:</label>
-            <input type="email" id="uemail" name="uemail"><br>
+            <input type="text" id="uemail" name="uemail"><br>
             <label for="uage">年龄:</label>
             <input type="text" id="uage" name="uage"><br>
       
@@ -84,9 +66,29 @@
             </div>
           </form>
         </div>
-      </div>
+    </div>
       
-
+    <div id="blogModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>修改博客信息</h2>
+          <form id="blogInfoForm">
+            <label for="bid">博客ID:</label>
+            <input type="text" id="bid" name="bid" readonly><br>
+            <label for="btitle">博客标题:</label>
+            <input type="text" id="btitle" name="btitle"><br>
+            <label for="bintroduce">博客简介:</label>
+            <input type="text" id="bintroduce" name="bintroduce"><br>
+            <label for="bpath">博客文件地址:</label>
+            <input type="text" id="bpath" name="bpath" readonly><br>
+      
+            <div class="btn-box">
+              <button type="submit" id="confirmBtn01">确认</button>
+              <button type="button" id="cancelBtn01">取消</button>
+            </div>
+          </form>
+        </div>
+    </div>
 
     <script src="../js/config.js"></script>
     <script src="../js/backend.js"></script>

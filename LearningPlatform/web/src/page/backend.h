@@ -89,7 +89,9 @@ inline void backendPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 		if (httpUrl.getParamter("get") == "userData") {
 			commend = getSelectComment("user_tb", "uid", n, size);
 		}
-
+		else if (httpUrl.getParamter("get") == "blogData") {
+			commend = getSelectComment("blog_tb", "bid", n, size);
+		}
 
 		sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
 		sqlServer->openDataBase("LEARNING");
@@ -111,6 +113,10 @@ inline void backendPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 		if (httpUrl.getParamter("search") == "userData") {
 			commend = getSearchComment("user_tb", "uaccount", httpUrl.getParamter("tag"));
 		}
+		else if (httpUrl.getParamter("search") == "blogData") {
+			commend = getSearchComment("blog_tb", "btitle", httpUrl.getParamter("tag"));
+		}
+
 
 		sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
 		sqlServer->openDataBase("LEARNING");
@@ -131,9 +137,34 @@ inline void backendPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 		json::JsonParser jp(_httpServerRequest.getData());
 		json::Json json = jp.parse();
 
-		std::string commend;
+
+
+		//std::string commend;
+
+		//if (httpUrl.getParamter("update") == "userData") {
+		//	commend = getUpdateUserDataComment("user_tb", json);
+		//}
+
+		char commend[2048] = { 0 };
+
 		if (httpUrl.getParamter("update") == "userData") {
-			commend = getUpdateUserDataComment("user_tb", json);
+			sprintf(commend,
+				"update user_tb set utype = '%s', uaccount = '%s', upassword = '%s', uphone = '%s', uemail = '%s', uage = '%s' where uid = '%s'",
+				json["utype"].asString().c_str(),
+				json["uaccount"].asString().c_str(),
+				json["upassword"].asString().c_str(),
+				json["uphone"].asString().c_str(),
+				json["uemail"].asString().c_str(),
+				json["uage"].asString().c_str(),
+				json["uid"].asString().c_str());
+
+		}
+		else if (httpUrl.getParamter("update") == "blogData") {
+			sprintf(commend,
+				"update blog_tb set btitle = '%s', bintroduce = '%s' where bid = '%s'",
+				json["btitle"].asString().c_str(),
+				json["bintroduce"].asString().c_str(),
+				json["bid"].asString().c_str());
 		}
 
 		sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
@@ -142,23 +173,39 @@ inline void backendPageMainFuntion(httpserver::HttpServerRequest& _httpServerReq
 	}
 	else if (httpUrl.isFindParamter("delete") == true) {
 
-
 		char commend[2048] = { 0 };
 
 		json::JsonParser jp(_httpServerRequest.getData());
-
 		
 		if (httpUrl.getParamter("delete") == "userData") {
 			sprintf(commend, "delete from user_tb where uid = '%s';", jp.parse()["uid"].asString().c_str());
+		}
+		else 		if (httpUrl.getParamter("delete") == "blogData") {
+			sprintf(commend, "delete from blog_tb where bid = '%s';", jp.parse()["bid"].asString().c_str());
 		}
 
 		sql::SQLServer* sqlServer = _httpServerRequest.getSQLServer();
 		sqlServer->openDataBase("LEARNING");
 		sqlServer->update(commend);
-
 	}
 
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 };

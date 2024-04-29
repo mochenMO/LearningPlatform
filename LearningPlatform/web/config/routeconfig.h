@@ -32,6 +32,7 @@ inline route::Route* createRoute()
 	route.setStaticFile("/main", "/html/main.html");
 	route.setStaticFile("/cv", "/html/cv.html");
 	route.setStaticFile("/backend", "/html/backend.html");
+	route.setStaticFile("/error", "/html/error.html");
 
 
 	// 设置动态路由
